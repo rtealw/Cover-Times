@@ -173,8 +173,9 @@ Formally,
 \hit &= \max_{i,j \in V(G)} \E_i[T_j]. \nonumber
 \end{align}
 Note that $\E_i[T_j] = \E[T_j | X_0 = i]$.
-Let the cover time $\cov$ be the expected time until all vertices have been
+Let the cover time $\cov$ be the until all vertices have been
 visited by the random walk $(X_t)$.
+We typically refer to the expected cover time $\cov$.
 Formally,
 \begin{align}
 \cov &= \E [ \max_{j \in V(G)} T_j ]. \nonumber
@@ -186,10 +187,250 @@ Formally,
 \section{Cover Times of Structured Graphs}
 
 \subsection{Small Example}
-Always possible to calculate exactly but the number of equations grows exponentially
-Special graph \cite{BH94} full cover time from vertex 1
-In symmetric cases, we can calculate it
-In other cases, we have to rely on bounds
+In general, it is always possible to find the exact cover time
+of a graph using first step analysis.
+We demonstrate the strategy on a small graph suggested by \cite{BH94}.
+
+\cref{fig:example} shows our small graph and the first step analysis
+for the random walk $(X_t)$ started from the top left vertex.
+The black vertex indicates the current vertex of the random walk
+and the empty vertices indicate the visited nodes.
+
+For a graph with $n$ vertices, there are $n$ possible choices for the current
+vertex and $2^{n-1}$ possible combinations of visited and unvisited vertices
+for each one.
+Of course, some states are inaccessible.
+But even on \cref{fig:example} where we exploit symmetry,
+there are almost a prohibitive number of cases.
+It follows from our combinatorial analysis that the number of states
+grows exponentially with the number of vertices.
+
+\begin{figure}[ht]
+	\centering
+		\begin{tikzpicture} [
+            > = stealth, % arrow head style
+            shorten > = 1pt, % don't touch arrow head to node
+            %auto,
+            node distance = 3cm, % distance between nodes
+            semithick % line style
+        ]
+
+			\tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+
+			\node (m) at (-1.2,1.75) {
+				\begin{tikzpicture}[scale = 3]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.1) {$\cov$};
+				    \node (bl) at (0,0) {};
+				    \node[current] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (a) at (2,3) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.3) {a};
+				    \node (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node[current] (br) at (1,0) {};
+				    \node (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (b) at (2,0) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, -.3) {b};
+				    \node (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[current] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (c) at (4,3) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.3) {c};
+				    \node (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node[visited] (br) at (1,0) {};
+				    \node[current] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (d) at (4,0) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, -.3) {d};
+				    \node (bl) at (0,0) {};
+				    \node[current] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (e) at (6,3) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.3) {e};
+				    \node (bl) at (0,0) {};
+				    \node[current] (tl) at (0,1) {};
+				    \node[visited] (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};		
+			\node (f) at (6, 0) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, -.3) {f};
+				    \node[current] (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (done) at (8, 3) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.3) {0};
+				    \node[visited] (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node[visited] (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (g) at (8, 0) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, -.3) {g};
+				    \node[visited] (bl) at (0,0) {};
+				    \node[current] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\begin{comment}
+		    \path[->] (m) edge node[above] {$\frac{1}{3}$} (a);	
+		    \path[->] (m) edge node[below] {$\frac{2}{3}$} (b); 
+		    \path[->] (a) edge[loop above] node[below] {$\frac{1}{3}$} (a);
+		    \path[->] (a) edge node[above] {$\frac{2}{3}$} (c);
+		    \path[->] (b) edge[bend left] node[below] {$\frac{1}{2}$} (d);
+		    \path[->] (b) edge node[below] {$\frac{1}{2}$} (e);
+		    \path[->] (c) edge[bend left] node[above] {$1$} (e);
+		    \path[->] (d) edge node[below] {$\frac{1}{3}$} (e);
+		    \path[->] (d) edge[bend left] node[below] {$\frac{1}{3}$} (b); 
+		    \path[->] (d) edge node[below] {$\frac{1}{3}$} (f);
+		    \path[->] (e) edge[bend left] node[above] {$\frac{1}{3}$} (c);
+		    \path[->] (e) edge[loop above] node[below] {$\frac{1}{3}$} (e);
+		    \path[->] (f) edge[bend left] node[below] {$\frac{1}{2}$} (g);
+		    \path[->] (g) edge[bend left] node[below] {$\frac{2}{3}$} (f);
+			\path[->] (e) edge node[above] {$\frac{1}{3}$} (done);
+			\path[->] (f) edge node[below] {$\frac{1}{2}$} (done);
+			\path[->] (g) edge node[right] {$\frac{1}{3}$} (done);
+			\end{comment}
+			\path[->] (m) edge (a);
+			\path[->] (m) edge (b);
+			\path[->] (a) edge[loop above] (a);
+			\path[->] (a) edge (c);
+			\path[->] (b) edge[bend left] (d);
+			\path[->] (b) edge (e);
+			\path[->] (c) edge[bend left] (e);
+			\path[->] (d) edge (e);
+			\path[->] (d) edge[bend left] (b);
+			\path[->] (d) edge (f);
+			\path[->] (e) edge[bend left] (c);
+			\path[->] (e) edge[loop above] (e);
+			\path[->] (f) edge[bend left] (g);
+			\path[->] (g) edge[bend left] (f);
+			\path[->] (e) edge (done);
+			\path[->] (f) edge (done);
+			\path[->] (g) edge (done);
+	\end{tikzpicture}
+	\caption{First step analysis applied to an asymmetric graph with $n=4$.}\label{fig:example}
+\end{figure}
+
+If we let the label of each graph in \cref{fig:example}
+denote the expected cover time from that graph, we have the following system
+of equations:
+\begin{align}
+\cov &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{b} \nonumber \\
+\textrm{a} &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{c} \nonumber \\
+\textrm{b} &= 1 + \frac{1}{2}\textrm{b} + \frac{1}{2}\textrm{e} \nonumber \\
+\textrm{c} &= 1 + 1\textrm{e} \nonumber\\
+\textrm{d} &= 1 + \frac{1}{3}\textrm{a} + \frac{1}{3}\textrm{e} + \frac{1}{3}\textrm{f} \nonumber \\
+\textrm{e} &= 1 + \frac{1}{3}\textrm{c} + \frac{1}{3}\textrm{e} + \frac{1}{3}\dot 0\nonumber \\
+\textrm{f} &= 1 + \frac{1}{2}\textrm{g} + \frac{1}{2}\dot 0\nonumber \\
+\textrm{g} &= 1 + \frac{2}{3}\textrm{f} + \frac{1}{3}\dot 0\nonumber \\
+\end{align}
+
+With a little linear algebra, we find that $\cov = \frac{43}{6}$.
+
+For large graphs, the first step analysis as an approach to finding the expected
+cover time is obviously intractable.
+The rest of this section deals with particularly symmetric graphs
+for which it is possible find a solution for an arbitrary $n$.
+However, we must rely on expected cover time bounds for the vast majority of cases.
 
 \subsection{Complete Graph}
 We call the graph with $n$ vertices and ${n \choose 2}$ edges the complete graph.
@@ -305,19 +546,21 @@ We apply our approach to the complete graph and conclude that
 \cov&= 2(n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+...+1\right). \nonumber
 \end{align}
 
-\subsection{Simple Cycle}
+\subsection{Line Graph}
+A line graph is a set of vertices connected in a line.
+(\cref{fig:line} is an example with $n=N+1$.)
 
-A simple cycle is a connected graph where
-each vertex has an edge to exactly two other vertices.
-(\cref{fig:cycle} is an example.)
+Our goal is to determine the cover time of a line graph.
+Let $(X_t)$ be the random walk started at vertex $i$.
+Notice that a random walk will have covered all vertices
+exactly when it has visited both endpoints.
+We can use this observation to break up the cover time into the time it takes
+to reach one of the endpoints and the time it takes to reach 
+the other endpoint.
 
-Our goal is to determine the cover time of a simple cycle.
-However, we begin by considering the cover time of a subset
-of the integers on the number line from $0$ to $N$.
-We then use our analysis to build our way up to a simple cycle.
+We will begin by considering the time $(X_t)$ takes to
+visit either one of the endpoints from vertex $i$.
 
-Consider a random walk on the finite linear graph.
-(For the finite linear graph in \cref{fig:line}, note that $n=N+1$.)
 From $X_t=i$, we move with equal probability to $i+1$
 and $i-1$ until we reach either $0$ or $N$.
 
@@ -340,14 +583,14 @@ and $i-1$ until we reach either $0$ or $N$.
 
 		\draw[edge] (-\N,0) -- (\N,0);
 	\end{tikzpicture}
-	\caption{A finite linear graph with a vertex at each integer from $0$ to $N$.}\label{fig:line}
+	\caption{A   line graph with a vertex at each integer from $0$ to $N$.}\label{fig:line}
 \end{figure}
 
 Call $e_i$ the expected number of steps until we reach either
 end of our random walk from state $i$.
 Our strategy is to write and solve a recurrence relation that
 uses what we know about the random walk.
-If $i=0,N$, we are already at the end point and $e_i=0$.
+If $i=0,N$, we are already at the endpoint and $e_i=0$.
 Otherwise, we take a step.
 There's a half probability our step is to the right and
 a half probability it is to the left.
@@ -358,10 +601,10 @@ e_i &= 1 + \frac{1}{2} \left(e_{i+1}\right) + \frac{1}{2}\left(e_{i-1}\right) \n
 \left(e_{i+1} - e_i\right) &=\left( e_i - e_{i-1}\right) - 2 \nonumber
 \end{align}
 
-While the final line may look unnecessarily complicated,
+While the final line may look more complicated than what we started with,
 notice that the structure of the equality lends itself to telescoping.
 
-To solve the telescoping equations, notice that the walk is symmetric:
+To solve the telescoping equations, observe that the walk is symmetric:
 we could flip the walk over the vertical axis without changing $e_i$.
 This makes sense because our intuition tells us that the only 
 identifying feature of $i$ is its respective distances to the endpoints.
@@ -394,19 +637,63 @@ e_i &= i (N-i) \label{eq:line}
 \end{align}
 
 \cref{thm:line} follows from \cref{eq:line} and the observation that any
-linear finite graph can be shifted so that the left end point
-is at $0$ and the right end point is at $N$.
+line graph can be shifted so that the left endpoint
+is at $0$ and the right endpoint is at $N$.
 
 \begin{theorem}
-The expected number of steps from a state to either end of a finite linear graph
-is the product of the distances from that state to each end point.
+The expected number of steps from a state to either end of a line graph
+is the product of the distances from that state to each endpoint.
 \label{thm:line}
 \end{theorem}
 
-We now return to cover times.
+We have the expected time until we reach one endpoint of our line graph.
+Now we want to find the expected time from one endpoint to the other $\E_0[T_N]$.
+By symmetry, $\E_0[T_N] = \E_N[T_0]$.
+
+We write
+\begin{align}
+\E_0[T_N] &= \E_0[T_1] + \E_1[T_2] + ... + \E_{i}[T_{i+1}] + ... + \E_{N-1}[T_N]. \nonumber
+\end{align}
+
+where $\E_{i}[T_{i+1}]$ is the expected time from state $i$ to $i+1$.
+Since there is only one edge incident to 0, we always move from 0 to 1.
+From state $i\neq0$, we take one step in each direction with equal probability.
+In half the cases, we have arrived at $i+1$.
+In the other half of cases, we are in $i-1$.
+It will take us $\E_{i-1}[T_i]$ steps back to $i$ and then another
+$\E_i[T_{i+1}]$ steps to $i+1$.
+Formally,
+\begin{align}
+\E_{i}[T_{i+1}] &= 1 + \frac{1}{2}(\E_{i-1}[T_i]+\E_i[T_{i+1}]) \nonumber \\
+ &= 2 + \E_{i-1}[T_{i}]. \nonumber
+\end{align}
+
+We can use $\E_0[T_1] = 1$ to solve for $E_i[T_{i+1}]$:
+\begin{align}
+E_i[T_{i+1}] &= E_{i-1}[T_{i}] + 2 = E_{i-2}[T_{i-1}] + 4 \nonumber\\
+ &= E_0[T_1] + 2(i-1) = 2i - 1. \nonumber
+\end{align}
+
+Then
+\begin{align}
+\E_0[T_N] &= 1 + 3 + ... + 2i - 1 + ... + 2(N-1) -1 \nonumber \\
+&= N^2 \nonumber
+\end{align}
+
+Then, by \cref{thm:line}, for the random walk from state $i$ on the line graph,
+\begin{align}
+\cov = i(N-i) + N^2. \nonumber
+\end{align}
+
+\subsection{Simple Cycle}
+
+A simple cycle is a connected graph where
+each vertex has an edge to exactly two other vertices.
+(\cref{fig:cycle} is an example.)
+
 Consider a random walk on a simple cycle as in \cref{fig:cycle}.
 (Note that the starting vertex is arbitrary since the graph is symmetric.)
-Think of $(X_t)$ as the walk on the number line (between $-n$ and $n$)
+Let $(X_t)$ be the walk on the number line (between $-n$ and $n$)
 where $X_0 = 0$.
 The cover time $\cov$ of the simple cycle is the expected number of steps 
 until we visit $n$ distinct integers.
@@ -441,7 +728,7 @@ Then by telescoping,
 
 At time $T_{k}$, we are either at integer $a$ or $b$.
 Then $\E[T_{k+1}-T_{k}]$ is the expected time until we reach $a-1$ or $b+1$.
-Notice that we can shift our end points to 0 and $b+1-(a-1) = b-a + 2 = k+1$.
+Notice that we can shift our endpoints to 0 and $b+1-(a-1) = b-a + 2 = k+1$.
 The expected number of steps to either $a-1$ or $b+1$
 is $1\dot (k+1-1) = k$ by \cref{thm:line}.
 
@@ -452,20 +739,7 @@ By linearity of expectation,
 &= 1 + 2 + \dots + k-1 + \dots + n-1  = \frac{1}{2}n(n-1). \nonumber
 \end{align}
 
-\subsection{Finite Linear Graph}
-We have already seen a finite linear graph.
-(For the finite linear graph in \cref{fig:line}, note that $n=N+1$).
-\cref{thm:line} tells us the expected time from an arbitrary point to
-one of the end points but we do not yet know the cover time.
 
-Observe that the cover time is the earliest time that both end points 
-have been visited.
-We can use our earlier result to find the time to one of the end points
-from an arbitrary position but we still need to find the expected time
-from that end point to the other.
-
-Consider $\E_i[T_N]$ the expected time to $N$ from vertex $i$.
-We want to find $\E_0[T_N]$. By symmetry, $\E_0[T_N] = \E_N[T_0]$.
 
 
 
@@ -508,7 +782,7 @@ For $1 \leq s \leq n-1$,
 \section{Simulation}
 
 \cite{AF14}
-\cite{BH94}
+
 \cite{Bo98}
 \cite{DS84}
 \cite{Du11}
