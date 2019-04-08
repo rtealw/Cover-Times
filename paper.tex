@@ -173,7 +173,7 @@ Formally,
 \hit &= \max_{i,j \in V(G)} \E_i[T_j]. \nonumber
 \end{align}
 Note that $\E_i[T_j] = \E[T_j | X_0 = i]$.
-Let the cover time $\cov$ be the until all vertices have been
+Let the cover time be the time until all vertices have been
 visited by the random walk $(X_t)$.
 We typically refer to the expected cover time $\cov$.
 Formally,
@@ -193,8 +193,8 @@ We demonstrate the strategy on a small graph suggested by \cite{BH94}.
 
 \cref{fig:example} shows our small graph and the first step analysis
 for the random walk $(X_t)$ started from the top left vertex.
-The black vertex indicates the current vertex of the random walk
-and the empty vertices indicate the visited nodes.
+The black circle indicates the current vertex of the random walk
+and the empty circles indicate the visited vertices.
 
 For a graph with $n$ vertices, there are $n$ possible choices for the current
 vertex and $2^{n-1}$ possible combinations of visited and unvisited vertices
@@ -202,7 +202,7 @@ for each one.
 Of course, some states are inaccessible.
 But even on \cref{fig:example} where we exploit symmetry,
 there are almost a prohibitive number of cases.
-It follows from our combinatorial analysis that the number of states
+It is easy to see that the number of states
 grows exponentially with the number of vertices.
 
 \begin{figure}[ht]
@@ -407,7 +407,7 @@ grows exponentially with the number of vertices.
 			\path[->] (f) edge (done);
 			\path[->] (g) edge (done);
 	\end{tikzpicture}
-	\caption{First step analysis applied to an asymmetric graph with $n=4$.}\label{fig:example}
+	\caption{First step analysis applied to a small, asymmetric graph with $n=4$.}\label{fig:example}
 \end{figure}
 
 If we let the label of each graph in \cref{fig:example}
@@ -433,7 +433,9 @@ for which it is possible find a solution for an arbitrary $n$.
 However, we must rely on expected cover time bounds for the vast majority of cases.
 
 \subsection{Complete Graph}
-We call the graph with $n$ vertices and ${n \choose 2}$ edges the complete graph.
+We call the graph with an edge between each pair of vertices the
+complete graph.
+Note that a complete graph with $n$ vertices has ${n \choose 2}$ edges.
 
 \begin{figure}[ht]
 	\centering
@@ -469,14 +471,14 @@ We write the cover time in terms of $X_i$ and use linearity of expectation.
 \end{align}
 
 The random variable $X_i$ takes value $k$ when $k-1$ steps lead us to
-already visited vertices and the $k^{th}$ step is to previously unvisited vertex.
+already visited vertices and the $k^{th}$ step is to a previously unvisited vertex.
 It follows that $X_i$ is geometric with distribution
 \begin{align}
 \pr(X_i = k) = (1-p_i)^{k-1}p_i, \nonumber
 \end{align}
 where $p_i$ is the probability of moving to a previously unvisited vertex.
-Then $\E[X_i] = \frac{1}{p_i}$. We now find $p_i$:
-the probability that we go to a previously unvisited vertex is $\frac{n-i}{n-1}$.
+Then $\E[X_i] = \frac{1}{p_i}$. We now find the probability $p_i$ that 
+we go to a previously unvisited vertex is $\frac{n-i}{n-1}$.
 This is because there are $n-i$ unvisited vertices and a total of $n-1$ adjacent vertices.
 It follows that $\E[X_i] = \frac{n-1}{n-i}$.
 Then
@@ -611,7 +613,7 @@ identifying feature of $i$ is its respective distances to the endpoints.
 The logical conclusion is that $e_i=e_{N-i}$.
 In particular, we have already seen that $e_0=e_N=0$ and it
 naturally follows that $e_1=e_{N_1}$.
-We use these observations to find $e_1$.
+We use these observations to find $e_1$:
 
 \begin{align}
 \left(e_{2} - e_1\right) &= \left(e_1 - e_{0}\right) - 2 \nonumber \\
@@ -719,7 +721,7 @@ on the simple cycle and conclude the random walk.
 
 In a slight abuse of notation, let $T_k$ be the 
 number of steps until we reach $k$ distinct vertices.
-Formally, $T_k = \min{t: b-a+1 = k}$.
+Formally, $T_k = \min\{t: b-a+1 = k\}$.
 Then by telescoping,
 \begin{align}
 \cov &= \E[T_n] = \E[(T_2 - T_1) + (T_3 - T_2) + \dots + 
