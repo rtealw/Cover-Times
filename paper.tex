@@ -421,7 +421,7 @@ of equations:
 \textrm{d} &= 1 + \frac{1}{3}\textrm{a} + \frac{1}{3}\textrm{e} + \frac{1}{3}\textrm{f} \nonumber \\
 \textrm{e} &= 1 + \frac{1}{3}\textrm{c} + \frac{1}{3}\textrm{e} + \frac{1}{3}\dot 0\nonumber \\
 \textrm{f} &= 1 + \frac{1}{2}\textrm{g} + \frac{1}{2}\dot 0\nonumber \\
-\textrm{g} &= 1 + \frac{2}{3}\textrm{f} + \frac{1}{3}\dot 0\nonumber \\
+\textrm{g} &= 1 + \frac{2}{3}\textrm{f} + \frac{1}{3}\dot 0\nonumber
 \end{align}
 
 With a little linear algebra, we find that $\cov = \frac{43}{6}$.
@@ -432,7 +432,7 @@ The rest of this section deals with particularly symmetric graphs
 for which it is possible find a solution for an arbitrary $n$.
 However, we must rely on expected cover time bounds for the vast majority of cases.
 
-\subsection{Complete Graph}
+\subsection{Complete Graph \label{sec:complete}}
 We call the graph with an edge between each pair of vertices the
 complete graph.
 Note that a complete graph with $n$ vertices has ${n \choose 2}$ edges.
@@ -741,15 +741,23 @@ By linearity of expectation,
 &= 1 + 2 + \dots + k-1 + \dots + n-1  = \frac{1}{2}n(n-1). \nonumber
 \end{align}
 
-
-
-
-
 \section{Bounds}
 \subsection{Matthews Method}
+We have seen that it is in general very hard
+to calculate the expected cover time of a random walk
+on a graph.
+The exceptions are symmetric or small graphs.
+In lieu of an exact solution, we want to 
+bound the expected cover time.
 
+The Matthews Method is an example of a remarkably good bound.
+In fact, it is tight for the complete graph:
+the expected time between any two vertices
+is $n-1$ so $\hit = n-1$ and \cref{thm:matthews} gives
+us the main result of \cref{sec:complete}.
 
-$\hit \leq \cov$
+In addition, the proof uses strategies we employed on the
+simple cycle and follows an intuitive structure.
 
 \begin{theorem}
 Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matthews}
@@ -759,32 +767,107 @@ Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matth
 \end{align}
 
 \begin{proof}
-Without loss of generality, we may assume that the walk started at vertex $n$.
+Without loss of generality, label the vertices $\{1, 2, ..., n\}$.
+We may assume that the walk started at vertex $n$.
 Let $\sigma$ be a uniform permutation of the unvisited $n-1$ vertices.
 The strategy is to look for the vertices in order $\sigma$.
-We call $\sigma_i$ the $i^{th}$ vertex we visit.
+
 Let $T_k$ be the first time that vertices $\sigma_1, \sigma_2, ..., \sigma_k$
 have all been visited.
-For $1 \leq s \leq n-1$,
+For ease of notation, set $L_k = X_{T_k}$ to be the last state among 
+$\sigma_1, \sigma_2, ..., \sigma_k$ to be visited (the first
+time they are all visited).
+
+We begin by writing the expected cover time in a clever way
+(similar to the strategy we employed on the cycle graph):
 \begin{align}
-\E_n[T_1 | \sigma_1 = s] = t_{n,s} \leq \hit \nonumber
+\cov &= \E_n[{T_{n-1}}]  \nonumber \\
+&= \E_n[T_1 + (T_2 - T_1) + ... + 
+(T_k - T_{k-1}) + ... + (T_{n-1} - T_{n-2})] . \nonumber
 \end{align}
+
+Our goal is to bound the cover time in terms of the hitting time.
+
+Consider the first term of the sum.
+Recall that the hitting time $\hit$ is the maximum
+expected time from any vertex to any other.
+It follows that for any choice of $\sigma_1$,
+the expected time from $n$ to $\sigma_1$ is less than or equal to $\hit$.
+Formally for $s$ an arbitrary state such that $1\leq s \leq n-1$,
+$\E_n[T_1] = \E_n[T_s] \leq \hit$.
+
+Now consider the $k^{th}$ term of the sum for $1 < k \leq n-1$.
+By conditional expectation,
+
+\begin{align}
+\E_n[T_k - T_{k-1}] &=
+\sum_{i=1}^k \E_n[T_k - T_{k-1} | L(k) = \sigma_i]
+P(L_k = \sigma_i). \nonumber 
+\end{align}
+
+Assume that the last vertex $L_k$ to be visted among the first
+$k$ vertices is not $\sigma_k$.
+Then the first time we visit the first $k-1$ vertices
+is also the first time we visit the first $k$ vertices
+(since we must have already visited $\sigma_k$).
+Formally, $\E_n[T_k-T_{k-1}|L(k) \neq \sigma_k] = 0$.
+Then 
+
+\begin{align}
+\E_n[T_k - T_{k-1}] &= 0 +
+\E_n[T_k - T_{k-1} | L(k) = \sigma_k]
+P(L_k = \sigma_k). \nonumber 
+\end{align}
+
+Since $\sigma$ is a random permutation, the probability that
+we visit $\sigma_k$ last is $\frac{1}{k}$.
+Formally, $P(L_k = \sigma_k) = \frac{1}{k}$.
+
+Finally, consider the expected time between $T_{k-1}$ and $T_{k}$
+given that last vertex we visit is $\sigma_k$.
+Certainly there exist $r$ and $s$ where $1 \leq r \neq s \leq n-1$
+such that $L_{k-1} = r$ and $L_k = s$.
+Then $\E_n[T_k - T_{k-1} | L(k) = \sigma_k] = \E_r[T_s] \leq \hit$.
+So
+\begin{align}
+\E_n[T_k - T_{k-1}] &\leq
+\hit \frac{1}{k}. \nonumber 
+\end{align}
+
+Putting it all together,
+\begin{align}
+\cov \leq \hit \left( 1+ \frac{1}{2} + ... + \frac{1}{k} 
++ ... + \frac{1}{n-1} \right). \nonumber
+\end{align}
+
 \end{proof}
 
 \subsection{Spanning Tree Argument}
+\cite{AF14} 3.2
+
+Edge commute inequality
+
+spanning trees
 
 \section{Distributional Aspects}
 \subsection{Complete Graph}
+\cite{Du11}
+Theorem 2.2.4 -> Example 2.2.5 -> Theorem 3.6.5 -> Example 3.6.6
 
 \section{Electrical Networks}
 \subsection{Definitions}
-\subsection{Commute Times}
+\cite{AF14} 3.3
+\subsection{Commute Time}
+\cite{AF14} Proposition 2.3 -> Corollary 2.8 -> Corollary 3.11
+
+\url{https://ocw.mit.edu/courses/mathematics/18-445-introduction-to-stochastic-processes-spring-2015/lecture-notes/MIT18_445S15_lecture8.pdf}
+
 \subsection{Balanced Trees}
+\cite{LP17} 11.3
 
 \section{Simulation}
 
 \cite{AF14}
-
 \cite{Bo98}
 \cite{DS84}
 \cite{Du11}
