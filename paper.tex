@@ -16,7 +16,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{thm-restate}
 \usepackage{enumitem}
-
+\usepackage{upgreek}
 %\usepackage{cite}
 \usepackage{cite}
 
@@ -100,10 +100,13 @@
 \newtheorem*{remark}{Remark}
 \newtheorem*{example}{Example}
 
-\DeclareMathOperator{\E}{\mathrm{E}}		% expected value
-\DeclareMathOperator{\pr}{\mathrm{P}}		% expected value
-\DeclareMathOperator{\cov}{t_\textrm{cov}}  % cover time
-\DeclareMathOperator{\hit}{t_{\textrm{hit}}}% hitting time
+\DeclareMathOperator{\E}{\mathrm{E}}		     % expected value
+\DeclareMathOperator{\pr}{\mathrm{P}}		     % expected value
+\DeclareMathOperator{\cov}{\uptau_\textrm{cov}}  % cover time variable
+\DeclareMathOperator{\tcov}{t_\textrm{cov}}      % cover time
+\DeclareMathOperator{\hit}{t_{\textrm{hit}}}     % hitting time
+\DeclareMathOperator{\Ceff}{C_\textrm{eff}}      % effective conductance
+\DeclareMathOperator{\Reff}{R_{\textrm{eff}}}     % effective resistance
 
 \newcommand{\todo}[1]{{\color{blue}{[{\bf TODO:} #1]}}}
 
@@ -148,37 +151,42 @@ Then $n$ is the number of vertices $|V(G)|$.
 %Without loss of generality, we label the vertices $\{1, 2, 3, ..., n\}$.
 
 We say $i\sim j$ for $i$ and $j$ in the vertex set $V(G)$ if $(i,j)$ in $E(G)$.
-Let $c(i,j)$ be the non-negative weight of the edge between vertices $i$ and $j$.
-If the graph is unweighted then $c(i,j) = 1$ if $i \sim j$.
+Let $C_{i,j}$ be the non-negative weight of the edge between vertices $i$ and $j$.
+We will mostly consider unweighted graphs
+with $C_{i,j} = 1$ if $i \sim j$ and $C_{i,j} = 0$ otherwise.
 
 Define the weight of vertex $i$ 
 \begin{align}
-c(i) &= \sum_{j:i \sim j} c(i,j). \nonumber
+C_i &= \sum_{j:i \sim j} C_{i,j}. \nonumber
 \end{align}
+In the unweighted case, $C_i$ is the degree of vertex $i$.
 
 We consider a random walk $(X_t)$ on $G$.
 Call $X_t$ the vertex that the walk is on at time $t$.
 The random walker begins at vertex $X_0$.
 At each step, the walker at vertex $i$ moves to neighboring vertex
-$j$ with probability $\frac{c(i,j)}{c(i)}$.
+$j$ with probability $c(i,j)/c(i)$.
 
 Let $T_{j}$ be the number of steps until the first visit to $j$.
 Formally,
 \begin{align}
-T_{j} &= \textrm{min} \left\{t : X_t = j \right\}. \nonumber
+T_{j} &= \textrm{min} \left\{t > 0 : X_t = j \right\}. \nonumber
 \end{align}
 Let the hitting time $\hit$ be the maximum expected time between two vertices on $G$.
+Note that $\E_i[T_j] = \E[T_j | X_0 = i]$.
 Formally, 
 \begin{align}
 \hit &= \max_{i,j \in V(G)} \E_i[T_j]. \nonumber
 \end{align}
-Note that $\E_i[T_j] = \E[T_j | X_0 = i]$.
-Let the cover time be the time until all vertices have been
+Let the cover time variable $\cov$ be the first time all vertices have been
 visited by the random walk $(X_t)$.
-We typically refer to the expected cover time $\cov$.
+Formally, $\cov$ is the minimum time that for all $i \in V(G)$
+there exists $t \leq \cov$ such that $X_t = i$.
+We also define the cover time as the expected value of $\cov$ from
+the worst initial vertex.
 Formally,
 \begin{align}
-\cov &= \E [ \max_{j \in V(G)} T_j ]. \nonumber
+\tcov &= \max_{j \in V(G)} \E_j[\cov] . \nonumber
 \end{align}
 
 \subsection{Outline}
@@ -199,10 +207,10 @@ and the empty circles indicate the visited vertices.
 For a graph with $n$ vertices, there are $n$ possible choices for the current
 vertex and $2^{n-1}$ possible combinations of visited and unvisited vertices
 for each one.
-Of course, some states are inaccessible.
+Of course, some cases are inaccessible by a random walk.
 But even on \cref{fig:example} where we exploit symmetry,
-there are almost a prohibitive number of cases.
-It is easy to see that the number of states
+there are almost a prohibitive number.
+It is easy to see that the number of cases 
 grows exponentially with the number of vertices.
 
 \begin{figure}[ht]
@@ -227,7 +235,7 @@ grows exponentially with the number of vertices.
 				    \draw[edge] (0,1) -- (1,0);
 				    \draw[edge] (0,1) -- (1,1);
 				    \draw[edge] (1,1) -- (1,0);
-				    \node (l) at (.5, 1.1) {$\cov$};
+				    \node (l) at (.5, 1.1) {$\tcov$};
 				    \node (bl) at (0,0) {};
 				    \node[current] (tl) at (0,1) {};
 				    \node (br) at (1,0) {};
@@ -407,14 +415,14 @@ grows exponentially with the number of vertices.
 			\path[->] (f) edge (done);
 			\path[->] (g) edge (done);
 	\end{tikzpicture}
-	\caption{First step analysis applied to a small, asymmetric graph with $n=4$.}\label{fig:example}
+	\caption{First step analysis applied to a small graph with $n=4$.}\label{fig:example}
 \end{figure}
 
 If we let the label of each graph in \cref{fig:example}
-denote the expected cover time from that graph, we have the following system
+denote the cover time from that case, we have the following system
 of equations:
 \begin{align}
-\cov &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{b} \nonumber \\
+\tcov &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{b} \nonumber \\
 \textrm{a} &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{c} \nonumber \\
 \textrm{b} &= 1 + \frac{1}{2}\textrm{b} + \frac{1}{2}\textrm{e} \nonumber \\
 \textrm{c} &= 1 + 1\textrm{e} \nonumber\\
@@ -424,13 +432,13 @@ of equations:
 \textrm{g} &= 1 + \frac{2}{3}\textrm{f} + \frac{1}{3}\dot 0\nonumber
 \end{align}
 
-With a little linear algebra, we find that $\cov = \frac{43}{6}$.
+With a little linear algebra, we find that $\tcov = 43/6$.
 
 For large graphs, the first step analysis as an approach to finding the expected
 cover time is obviously intractable.
 The rest of this section deals with particularly symmetric graphs
-for which it is possible find a solution for an arbitrary $n$.
-However, we must rely on expected cover time bounds for the vast majority of cases.
+for which it is possible to find a solution for an arbitrary $n$.
+However, we must rely on cover time bounds for the vast majority of cases.
 
 \subsection{Complete Graph \label{sec:complete}}
 We call the graph with an edge between each pair of vertices the
@@ -460,30 +468,34 @@ Our goal is to find the expected number of steps until we have visited all
 $n$ vertices in the complete graph.
 Observe that the random walk can start at any vertex without loss of generality
 because the graph is symmetric.
-The strategy is to write the cover time $\cov$ in terms of the expected
+The strategy is to write the cover time $\tcov$ in terms of the expected
 value of more simple random variables.
 Let $X_i$ be the random variable that represents the number of steps to go
 from $i-1$ to $i$ unique vertices (excluding the current vertex).
 
 We write the cover time in terms of $X_i$ and use linearity of expectation.
 \begin{align}
-\cov&= \E[X_1+X_2+X_3+...+X_{n+1}] = \sum_{i=1}^n \E[X_i] \nonumber
+\tcov&= \E[X_1+X_2+X_3+...+X_{n+1}] = \sum_{i=1}^n \E[X_i] \nonumber
 \end{align}
 
 The random variable $X_i$ takes value $k$ when $k-1$ steps lead us to
 already visited vertices and the $k^{th}$ step is to a previously unvisited vertex.
+Then $X_i$ is certainly geometric and $\E[X_i] = 1/p_i$. 
+
+\begin{comment}
 It follows that $X_i$ is geometric with distribution
 \begin{align}
 \pr(X_i = k) = (1-p_i)^{k-1}p_i, \nonumber
 \end{align}
 where $p_i$ is the probability of moving to a previously unvisited vertex.
-Then $\E[X_i] = \frac{1}{p_i}$. We now find the probability $p_i$ that 
-we go to a previously unvisited vertex is $\frac{n-i}{n-1}$.
+\end{comment}
+We now find the probability $p_i$ that 
+we go to a previously unvisited vertex is $(n-i)/(n-1)$.
 This is because there are $n-i$ unvisited vertices and a total of $n-1$ adjacent vertices.
-It follows that $\E[X_i] = \frac{n-1}{n-i}$.
+It follows that $\E[X_i] = (ln-1)(n-i)$.
 Then
 \begin{align}
-\cov&=   \sum_{i=1}^n \frac{n-1}{n-i} \nonumber \\
+\tcov&=   \sum_{i=1}^n \frac{n-1}{n-i} \nonumber \\
 &=  (n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+...+1\right). \nonumber
 \end{align}
 
@@ -503,7 +515,7 @@ We apply our approach to the complete graph and substitute the $r$ possible coup
 we can find for the $n-1$ vertices we could move to.
 Then
 \begin{align}
-\cov&=  r \left(\frac{1}{r}+\frac{1}{r-1}+...+1\right). \nonumber
+\tcov&=  r \left(\frac{1}{r}+\frac{1}{r-1}+...+1\right). \nonumber
 \end{align}
 
 Another more subtle application of the cover time on a complete graph
@@ -540,12 +552,13 @@ edge to the center.
 A random walk begins at the central vertex and moves with uniform probability to
 one of the $n-1$ adjacent vertices.
 Whereas in the complete graph and coupon collecting problems we 
-restarted in one step, a random walk on the $n$-star probabilistically restarts
+visited a (possibly) new vertex in one step,
+a random walk on the $n$-star visits a (possibly) new vertex
 in two steps: one step to each leaf and one step back.
 We apply our approach to the complete graph and conclude that
 
 \begin{align}
-\cov&= 2(n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+...+1\right). \nonumber
+\tcov&= 2(n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+...+1\right). \nonumber
 \end{align}
 
 \subsection{Line Graph}
@@ -616,9 +629,8 @@ naturally follows that $e_1=e_{N_1}$.
 We use these observations to find $e_1$:
 
 \begin{align}
-\left(e_{2} - e_1\right) &= \left(e_1 - e_{0}\right) - 2 \nonumber \\
-\left(e_{3} - e_2\right) &= \left(e_2 - e_{1}\right) - 2 = \left(e_1 - e_{0}\right) - 4\nonumber \\
-\left(e_{4} - e_3\right) &= \left(e_3 - e_{2}\right) - 2 = \left(e_1 - e_{0}\right) - 6\nonumber \\
+(e_2 - e_1) &= (e_1-e_0) -2 \nonumber\\
+(e_3 - e_2) &= (e_1-e_0) -4 \nonumber\\
 &\;\;\vdots \nonumber\\
 \left(e_N - e_{N-1}\right) &= \left(e_1 - e_0\right) - 2 (N-1) \nonumber \\
 \left(0 - e_1\right) &= \left(e_1 - 0\right) - 2 (N-1) \nonumber \\
@@ -631,12 +643,34 @@ However, our goal is to find the expected number of steps
 from an arbitrary point $i$.
 We use $e_1$ to find the general solution.
 
+\begin{comment}
 \begin{align}
 e_2  &= e_1 + (e_1 - e_0) - 2 = 2 (N - 2) \nonumber\\
 e_3  &= e_2 + (e_2 - e_1) - 2 = 2 \left[2 (N-2) \right] - (N-1) -2 = 3 (N - 3) \nonumber\\
 &\;\;\vdots \nonumber\\
 e_i &= i (N-i) \label{eq:line}
 \end{align}
+\end{comment}
+
+\begin{align}
+(e_2 - e_1) &= (e_1-e_0) -2 \nonumber\\
+(e_3 - e_2) &= (e_1-e_0) -4 \nonumber\\
+&\;\;\vdots \nonumber\\
+(e_i-e_{i-1}) &= (e_1 - e_0) - 2(i-1) \nonumber
+\end{align}
+
+Remember that $e_0=0$, $e_1=N-1$, and 
+$\sum_{i}^{i-1} i = (i-1)i/2$.
+We add all $i-1$ equations:
+
+\begin{align}
+(e_i - e_1) &= (i-1) e_1 - 2[1+2+...+i-1] \nonumber \\
+e_i &= i(N-1) - 2 \frac{(i-1)i}{2} \nonumber\\
+&= i(N-1 - i + 1) = i(N-i)
+\label{eq:line}
+\end{align}
+
+
 
 \cref{thm:line} follows from \cref{eq:line} and the observation that any
 line graph can be shifted so that the left endpoint
@@ -684,7 +718,7 @@ Then
 
 Then, by \cref{thm:line}, for the random walk from state $i$ on the line graph,
 \begin{align}
-\cov = i(N-i) + N^2. \nonumber
+\tcov = i(N-i) + N^2. \nonumber
 \end{align}
 
 \subsection{Simple Cycle}
@@ -697,7 +731,7 @@ Consider a random walk on a simple cycle as in \cref{fig:cycle}.
 (Note that the starting vertex is arbitrary since the graph is symmetric.)
 Let $(X_t)$ be the walk on the number line (between $-n$ and $n$)
 where $X_0 = 0$.
-The cover time $\cov$ of the simple cycle is the expected number of steps 
+The cover time $\tcov$ of the simple cycle is the expected number of steps 
 until we visit $n$ distinct integers.
 
 \begin{figure}[ht]
@@ -713,7 +747,7 @@ until we visit $n$ distinct integers.
 
 Let $\{a, a+1, \dots, b-1, b\}$ 
 denote the set of vertices we have visited.
-Since the walk is on a line, we can write $[a,b]$ for the range
+Since the walk is on a line, we can $[a,b]$ for the range
 of the walk where $a$ is the smallest 
 and $b$ is the largest vertex we have visited.
 Notice that if $a \leq -n$ or $b \geq n$, we have covered all $n$ vertices
@@ -724,31 +758,150 @@ number of steps until we reach $k$ distinct vertices.
 Formally, $T_k = \min\{t: b-a+1 = k\}$.
 Then by telescoping,
 \begin{align}
-\cov &= \E[T_n] = \E[(T_2 - T_1) + (T_3 - T_2) + \dots + 
+\tcov &= \E[T_n] = \E[(T_2 - T_1) + (T_3 - T_2) + \dots + 
 (T_k - T_{k-1}) + \dots + (T_n - T_{n-1})] \nonumber
 \end{align}
 
 At time $T_{k}$, we are either at integer $a$ or $b$.
-Then $\E[T_{k+1}-T_{k}]$ is the expected time until we reach $a-1$ or $b+1$.
+Then $\E[T_{k+1}-T_{k}]$ is the first time we reach $a-1$ or $b+1$.
 Notice that we can shift our endpoints to 0 and $b+1-(a-1) = b-a + 2 = k+1$.
 The expected number of steps to either $a-1$ or $b+1$
 is $1\dot (k+1-1) = k$ by \cref{thm:line}.
 
 By linearity of expectation,
 \begin{align}
-\cov &=  (\E[T_2] - \E[T_1]) + \dots +
+\tcov &=  (\E[T_2] - \E[T_1]) + \dots +
 (\E[T_{k+1}] - \E[T_{k}]) + \dots + (\E[T_n] - \E[T_{n-1}]) \nonumber\\
 &= 1 + 2 + \dots + k-1 + \dots + n-1  = \frac{1}{2}n(n-1). \nonumber
+\end{align}
+
+
+\section{Electrical Networks}
+\cite{DS84}
+There are many connections between electrical networks
+and random walks.
+Physical properties like voltage, current, and resistance
+all have probabilistic interpretations.
+In this section, we explore electrical networks to build intuition about 
+random walks and motivate a result we use to bound cover times.
+
+So that the reader may more easily distinguish between
+vertices, consider $x$ and $y$ in $V(G)$.
+Recall that $C_{x,y}$ is the weight of the edge
+between vertices $x$ and $y$, $C_x$ is the sum
+of all $C_{x,y}$ where $x \sim y$, and the probability $\pr_{x,y}$
+that we go from $x$ to $y$ is $C_{x,y}/C_x$.
+For the rest of this section, we will call $C_{x,y}$
+the conductance between $x$ and $y$.
+Define the resistance $R_{x,y}$ between $x$ and $y$
+as $1/ C_{x,y}$.
+
+We now consider the distribution of the random
+walk on the vertices of our graph.
+Define the proportion $\pi_x$ of time we spend in $x$
+as $C_x/C$ where $C=\sum_y C_y$.
+
+We verify that $\pi$ is the stationary distribution
+of $(X_t)$.
+To begin,
+\begin{align}
+C_x \pr_{x,y} &= C_x \frac{C_{x,y}}{C_x} = C_{x,y} = C_{y,x} 
+= C_y \frac{C_{y,x}}{C_y} = C_y \pr_{y,x}. \nonumber
+\end{align}
+Dividing by $C$ gives $\pi_x \pr_{x,y} = \pi_y \pr_{y,x}$.
+(So $\pi$ satisfies detailed balance.)
+Summing over $x$,
+\begin{align}
+\sum_x \pi_x \pr_{x,y} = \pi_y . \nonumber
+\end{align}
+Then $\pi \pr = \pi$ where $\pr$ is the matrix of transition probabilities.
+It follows that $\pi$ is indeed the stationary distribution of $(X_t)$.
+
+We now introduce voltage, current, and effective resistance.
+Consider $a$ and $b$ in $V(G)$.
+Set the voltage to be 1 at $a$ and 0 at $b$.
+We may think of voltage as the probability we get to $a$ before $b$.
+Probabilistically, of course $v_a = 1$ and $v_b=0$.
+Voltage is a harmonic function so the voltage at every vertex $x$ in 
+$V(G) \textbackslash \{a,b\}$ is determined by the boundary values
+(at $a$ and $b$).
+
+The current between two vertices is the product of the
+difference in their voltages and the conductance of their edge.
+We may think of current as the net number of movements through an edge.
+Kirchoff's Current Law says that the sum of current on any vertex is 0.
+Probabilistically, of course every time we enter a vertex we must also leave it.
+Using Kirchoff's Current Law and the definition of current,
+we justify the probabilistic interpretation of voltage
+\begin{align}
+\sum_y i_{x,y} &= 0 = \sum_y (v_x - v_y)C_{x,y} \nonumber \\
+v_x \sum_y C_{x,y} &= \sum_y C_{x,y} v_y \nonumber \\
+v_x &= \sum_y \frac{C_{x,y}}{C_x} v_y = \sum_y \pr_{x,y} v_y. \nonumber
+\end{align}
+We can probabilistically verify that $v_x = \sum_y \pr_{x,y} v_y$
+using first step analysis on the probability of reaching $a$ before $b$.
+
+We now have the requisite background to prove a result
+we will use to bound cover times.
+Define the probability $\pr_a(T_b < T_a)$ that starting at $a$
+we reach $b$ before returning to $a$.
+(Recall that $T_a>0$.)
+Now define the effective conductance $\Ceff$ as $i_a/v_a$.
+
+With a voltage of 1 at $a$ and 0 at $b$,
+\begin{align}
+\Ceff &= i_a/1 =
+\sum_y (v_a - v_y) C_{a,y} =
+\sum_y (v_a - v_y) \frac{C_{a,y}}{C_a} C_a \nonumber \\
+&= C_a (\frac{v_a}{C_a} \sum_y C_{a,y} - \sum_y \frac{C_{a,y}}{C_a} v_y)=
+C_a(1-\sum_y\pr_{a,y}v_y).\nonumber
+\end{align}
+
+Recall $\sum_y P_{a,y} v_y$ is the probability we reach $a$ before $b$
+so 1 minus that is the probability we reach $b$ before returning to $a$.
+
+Then
+\begin{align}
+\Ceff = C_a \pr_a(T_b < T_a) \nonumber
+\end{align}
+and
+\begin{align}
+\Reff = \frac{1}{C_a \pr_a(T_b < T_a)}. \nonumber
+\end{align}
+
+We use the fact that $\pi_a = C_a / C$ and multiply by $C$,
+\begin{align}
+\Reff C = \frac{1}{\pi_a \pr_a(T_b < T_a)}. \nonumber
+\end{align}
+
+Now our job is to interpret $\Reff C$.
+Recall that $\pr_a(T_b < T_a)$ is the probability, starting from $a$,
+that we get to $b$ before returning to $a$.
+We do independent trials, starting from $a$, until we reach $b$ before $a$.
+Each ``failure'' resets the process so $\pr_a(T_b < T_a)$ is geometrically distributed.
+Then the expected value $1/\pr_a(T_b < T_a)$ is the expected number of times
+we return to $a$ before we finally reach $b$ (and again return to $a$).
+
+Recall that $\pi_a$ is the probability that $(X_t) = a$.
+By the same argument, $1/\pi_a$ is the expected return time to $a$.
+
+Thus the expected time from $a$ to $b$ and back is
+the product of the expected number of times we return to $a$ before reaching $b$
+and the expected return time to $a$.
+The commute time identity follows
+\begin{align}
+E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a}\frac{1}{\pr_a(T_b < T_a)} = \Reff C.
+\label{eqn:commute}
 \end{align}
 
 \section{Bounds}
 \subsection{Matthews Method}
 We have seen that it is in general very hard
-to calculate the expected cover time of a random walk
+to calculate the cover time of a random walk
 on a graph.
 The exceptions are symmetric or small graphs.
 In lieu of an exact solution, we want to 
-bound the expected cover time.
+bound the cover time.
 
 The Matthews Method is an example of a remarkably good bound.
 In fact, it is tight for the complete graph:
@@ -763,7 +916,7 @@ simple cycle and follows an intuitive structure.
 Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matthews}
 \end{theorem}
 \begin{align}
-\cov &\leq \hit \left(1 + \frac{1}{2} + \frac{1}{3} + ... + \frac{1}{n-1} \right). \nonumber
+\tcov &\leq \hit \left(1 + \frac{1}{2} + \frac{1}{3} + ... + \frac{1}{n-1} \right). \nonumber
 \end{align}
 
 \begin{proof}
@@ -775,13 +928,13 @@ The strategy is to look for the vertices in order $\sigma$.
 Let $T_k$ be the first time that vertices $\sigma_1, \sigma_2, ..., \sigma_k$
 have all been visited.
 For ease of notation, set $L_k = X_{T_k}$ to be the last state among 
-$\sigma_1, \sigma_2, ..., \sigma_k$ to be visited (the first
-time they are all visited).
+$\sigma_1, \sigma_2, ..., \sigma_k$ to be visited the first
+time they are all visited.
 
-We begin by writing the expected cover time in a clever way
+We begin by writing the cover time in a clever way
 (similar to the strategy we employed on the cycle graph):
 \begin{align}
-\cov &= \E_n[{T_{n-1}}]  \nonumber \\
+\tcov &= \E_n[{T_{n-1}}]  \nonumber \\
 &= \E_n[T_1 + (T_2 - T_1) + ... + 
 (T_k - T_{k-1}) + ... + (T_{n-1} - T_{n-2})] . \nonumber
 \end{align}
@@ -820,8 +973,8 @@ P(L_k = \sigma_k). \nonumber
 \end{align}
 
 Since $\sigma$ is a random permutation, the probability that
-we visit $\sigma_k$ last is $\frac{1}{k}$.
-Formally, $P(L_k = \sigma_k) = \frac{1}{k}$.
+we visit $\sigma_k$ last is $1/k$.
+Formally, $P(L_k = \sigma_k) = 1/k$.
 
 Finally, consider the expected time between $T_{k-1}$ and $T_{k}$
 given that last vertex we visit is $\sigma_k$.
@@ -836,11 +989,14 @@ So
 
 Putting it all together,
 \begin{align}
-\cov \leq \hit \left( 1+ \frac{1}{2} + ... + \frac{1}{k} 
+\tcov \leq \hit \left( 1+ \frac{1}{2} + ... + \frac{1}{k} 
 + ... + \frac{1}{n-1} \right). \nonumber
 \end{align}
 
 \end{proof}
+
+\subsubsection{Balanced Trees}
+\cite{LP17} 11.3
 
 \subsection{Spanning Tree Argument}
 \cite{AF14} 3.2
@@ -854,25 +1010,11 @@ spanning trees
 \cite{Du11}
 Theorem 2.2.4 -> Example 2.2.5 -> Theorem 3.6.5 -> Example 3.6.6
 
-\section{Electrical Networks}
-\subsection{Definitions}
-\cite{AF14} 3.3
-\subsection{Commute Time}
-\cite{AF14} Proposition 2.3 -> Corollary 2.8 -> Corollary 3.11
-
-\url{https://ocw.mit.edu/courses/mathematics/18-445-introduction-to-stochastic-processes-spring-2015/lecture-notes/MIT18_445S15_lecture8.pdf}
-
-\subsection{Balanced Trees}
-\cite{LP17} 11.3
 
 \section{Simulation}
 
-\cite{AF14}
 \cite{Bo98}
-\cite{DS84}
-\cite{Du11}
 \cite{Gr10}
-\cite{LP17}
 
 \newpage
 \bibliography{mybib}{}
