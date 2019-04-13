@@ -189,6 +189,71 @@ Formally,
 \tcov &= \max_{j \in V(G)} \E_j[\cov] . \nonumber
 \end{align}
 
+\subsection{Electrical Networks \label{sec:electric}}
+
+There are many connections between electrical networks
+and random walks \cite{DS84}.
+Physical properties like voltage, current, and resistance
+all have probabilistic interpretations.
+In this section, we explore electrical networks to build intuition about 
+random walks.
+
+So that the reader may more easily distinguish between
+vertices, consider $x$ and $y$ in $V(G)$.
+Recall that $C_{x,y}$ is the weight of the edge
+between vertices $x$ and $y$, $C_x$ is the sum
+of all $C_{x,y}$ where $x \sim y$, and the probability $\pr_{x,y}$
+that we go from $x$ to $y$ is $C_{x,y}/C_x$.
+For the rest of this section, we will call $C_{x,y}$
+the conductance between $x$ and $y$.
+Define the resistance $R_{x,y}$ between $x$ and $y$
+as $1/ C_{x,y}$.
+
+We now consider the distribution of the random
+walk on the vertices of our graph.
+Define the proportion $\pi_x$ of time we spend in $x$
+as $C_x/C$ where $C=\sum_y C_y$.
+
+We verify that $\pi$ is the stationary distribution
+of $(X_t)$.
+To begin,
+\begin{align}
+C_x \pr_{x,y} &= C_x \frac{C_{x,y}}{C_x} = C_{x,y} = C_{y,x} 
+= C_y \frac{C_{y,x}}{C_y} = C_y \pr_{y,x}. \nonumber
+\end{align}
+Dividing by $C$ gives $\pi_x \pr_{x,y} = \pi_y \pr_{y,x}$.
+(So $\pi$ satisfies detailed balance.)
+Summing over $x$,
+\begin{align}
+\sum_x \pi_x \pr_{x,y} = \pi_y . \nonumber
+\end{align}
+Then $\pi \pr = \pi$ where $\pr$ is the matrix of transition probabilities.
+It follows that $\pi$ is indeed the stationary distribution of $(X_t)$.
+
+We now introduce voltage, current, and effective resistance.
+Consider $a$ and $b$ in $V(G)$.
+Set the voltage to be 1 at $a$ and 0 at $b$.
+We may think of voltage as the probability we get to $a$ before $b$.
+Probabilistically, of course $v_a = 1$ and $v_b=0$.
+Voltage is a harmonic function so the voltage at every vertex $x$ in 
+$V(G) \textbackslash \{a,b\}$ is determined by the boundary values
+(at $a$ and $b$).
+
+The current between two vertices is the product of the
+difference in their voltages and the conductance of their edge.
+We may think of current as the net number of movements through an edge.
+Kirchoff's Current Law says that the sum of current on any vertex is 0.
+Probabilistically, of course every time we enter a vertex we must also leave it.
+Using Kirchoff's Current Law and the definition of current,
+we justify the probabilistic interpretation of voltage
+\begin{align}
+\sum_y i_{x,y} &= 0 = \sum_y (v_x - v_y)C_{x,y} \nonumber \\
+v_x \sum_y C_{x,y} &= \sum_y C_{x,y} v_y \nonumber \\
+v_x &= \sum_y \frac{C_{x,y}}{C_x} v_y = \sum_y \pr_{x,y} v_y. \nonumber
+\end{align}
+We can probabilistically verify that $v_x = \sum_y \pr_{x,y} v_y$
+using first step analysis on the probability of reaching $a$ before $b$.
+
 \subsection{Outline}
 
 
@@ -775,125 +840,6 @@ By linearity of expectation,
 &= 1 + 2 + \dots + k-1 + \dots + n-1  = \frac{1}{2}n(n-1). \nonumber
 \end{align}
 
-
-\section{Electrical Networks}
-\cite{DS84}
-There are many connections between electrical networks
-and random walks.
-Physical properties like voltage, current, and resistance
-all have probabilistic interpretations.
-In this section, we explore electrical networks to build intuition about 
-random walks and motivate a result we use to bound cover times.
-
-So that the reader may more easily distinguish between
-vertices, consider $x$ and $y$ in $V(G)$.
-Recall that $C_{x,y}$ is the weight of the edge
-between vertices $x$ and $y$, $C_x$ is the sum
-of all $C_{x,y}$ where $x \sim y$, and the probability $\pr_{x,y}$
-that we go from $x$ to $y$ is $C_{x,y}/C_x$.
-For the rest of this section, we will call $C_{x,y}$
-the conductance between $x$ and $y$.
-Define the resistance $R_{x,y}$ between $x$ and $y$
-as $1/ C_{x,y}$.
-
-We now consider the distribution of the random
-walk on the vertices of our graph.
-Define the proportion $\pi_x$ of time we spend in $x$
-as $C_x/C$ where $C=\sum_y C_y$.
-
-We verify that $\pi$ is the stationary distribution
-of $(X_t)$.
-To begin,
-\begin{align}
-C_x \pr_{x,y} &= C_x \frac{C_{x,y}}{C_x} = C_{x,y} = C_{y,x} 
-= C_y \frac{C_{y,x}}{C_y} = C_y \pr_{y,x}. \nonumber
-\end{align}
-Dividing by $C$ gives $\pi_x \pr_{x,y} = \pi_y \pr_{y,x}$.
-(So $\pi$ satisfies detailed balance.)
-Summing over $x$,
-\begin{align}
-\sum_x \pi_x \pr_{x,y} = \pi_y . \nonumber
-\end{align}
-Then $\pi \pr = \pi$ where $\pr$ is the matrix of transition probabilities.
-It follows that $\pi$ is indeed the stationary distribution of $(X_t)$.
-
-We now introduce voltage, current, and effective resistance.
-Consider $a$ and $b$ in $V(G)$.
-Set the voltage to be 1 at $a$ and 0 at $b$.
-We may think of voltage as the probability we get to $a$ before $b$.
-Probabilistically, of course $v_a = 1$ and $v_b=0$.
-Voltage is a harmonic function so the voltage at every vertex $x$ in 
-$V(G) \textbackslash \{a,b\}$ is determined by the boundary values
-(at $a$ and $b$).
-
-The current between two vertices is the product of the
-difference in their voltages and the conductance of their edge.
-We may think of current as the net number of movements through an edge.
-Kirchoff's Current Law says that the sum of current on any vertex is 0.
-Probabilistically, of course every time we enter a vertex we must also leave it.
-Using Kirchoff's Current Law and the definition of current,
-we justify the probabilistic interpretation of voltage
-\begin{align}
-\sum_y i_{x,y} &= 0 = \sum_y (v_x - v_y)C_{x,y} \nonumber \\
-v_x \sum_y C_{x,y} &= \sum_y C_{x,y} v_y \nonumber \\
-v_x &= \sum_y \frac{C_{x,y}}{C_x} v_y = \sum_y \pr_{x,y} v_y. \nonumber
-\end{align}
-We can probabilistically verify that $v_x = \sum_y \pr_{x,y} v_y$
-using first step analysis on the probability of reaching $a$ before $b$.
-
-We now have the requisite background to prove a result
-we will use to bound cover times.
-Define the probability $\pr_a(T_b < T_a)$ that starting at $a$
-we reach $b$ before returning to $a$.
-(Recall that $T_a>0$.)
-Now define the effective conductance $\Ceff$ as $i_a/v_a$.
-
-With a voltage of 1 at $a$ and 0 at $b$,
-\begin{align}
-\Ceff &= i_a/1 =
-\sum_y (v_a - v_y) C_{a,y} =
-\sum_y (v_a - v_y) \frac{C_{a,y}}{C_a} C_a \nonumber \\
-&= C_a (\frac{v_a}{C_a} \sum_y C_{a,y} - \sum_y \frac{C_{a,y}}{C_a} v_y)=
-C_a(1-\sum_y\pr_{a,y}v_y).\nonumber
-\end{align}
-
-Recall $\sum_y P_{a,y} v_y$ is the probability we reach $a$ before $b$
-so 1 minus that is the probability we reach $b$ before returning to $a$.
-
-Then
-\begin{align}
-\Ceff = C_a \pr_a(T_b < T_a) \nonumber
-\end{align}
-and
-\begin{align}
-\Reff = \frac{1}{C_a \pr_a(T_b < T_a)}. \nonumber
-\end{align}
-
-We use the fact that $\pi_a = C_a / C$ and multiply by $C$,
-\begin{align}
-\Reff C = \frac{1}{\pi_a \pr_a(T_b < T_a)}. \nonumber
-\end{align}
-
-Now our job is to interpret $\Reff C$.
-Recall that $\pr_a(T_b < T_a)$ is the probability, starting from $a$,
-that we get to $b$ before returning to $a$.
-We do independent trials, starting from $a$, until we reach $b$ before $a$.
-Each ``failure'' resets the process so $\pr_a(T_b < T_a)$ is geometrically distributed.
-Then the expected value $1/\pr_a(T_b < T_a)$ is the expected number of times
-we return to $a$ before we finally reach $b$ (and again return to $a$).
-
-Recall that $\pi_a$ is the probability that $(X_t) = a$.
-By the same argument, $1/\pi_a$ is the expected return time to $a$.
-
-Thus the expected time from $a$ to $b$ and back is
-the product of the expected number of times we return to $a$ before reaching $b$
-and the expected return time to $a$.
-The commute time identity follows
-\begin{align}
-E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a}\frac{1}{\pr_a(T_b < T_a)} = \Reff C.
-\label{eqn:commute}
-\end{align}
-
 \section{Bounds}
 \subsection{Matthews Method}
 We have seen that it is in general very hard
@@ -903,13 +849,13 @@ The exceptions are symmetric or small graphs.
 In lieu of an exact solution, we want to 
 bound the cover time.
 
-The Matthews Method is an example of a remarkably good bound.
+The Matthews Method is an example of a remarkably good bound \cite{LP17}.
 In fact, it is tight for the complete graph:
 the expected time between any two vertices
-is $n-1$ so $\hit = n-1$ and \cref{thm:matthews} gives
+is $n-1 = \hit$ and \cref{thm:matthews} gives
 us the main result of \cref{sec:complete}.
 
-In addition, the proof uses strategies we employed on the
+An added benefit is that the proof uses strategies we employed on the
 simple cycle and follows an intuitive structure.
 
 \begin{theorem}
@@ -995,7 +941,60 @@ Putting it all together,
 
 \end{proof}
 
-\subsubsection{Balanced Trees}
+\subsection{Commute Time Identity}
+Recall \cref{sec:electric}.
+Define the probability $\pr_a(T_b < T_a)$ that starting at $a$
+we reach $b$ before returning to $a$.
+(Recall that $T_a>0$.)
+Now define the effective conductance $\Ceff$ as $i_a/v_a$
+and the effective resistance $\Reff$ as $1/\Ceff$.
+
+With a voltage of 1 at $a$ and 0 at $b$,
+\begin{align}
+\Ceff &= i_a/1 =
+\sum_y (v_a - v_y) C_{a,y} =
+\sum_y (v_a - v_y) \frac{C_{a,y}}{C_a} C_a \nonumber \\
+&= C_a (\frac{v_a}{C_a} \sum_y C_{a,y} - \sum_y \frac{C_{a,y}}{C_a} v_y)=
+C_a(1-\sum_y\pr_{a,y}v_y).\nonumber
+\end{align}
+
+Recall $\sum_y P_{a,y} v_y$ is the probability we reach $a$ before $b$
+so 1 minus that is the probability we reach $b$ before returning to $a$.
+
+Then
+\begin{align}
+\Ceff = C_a \pr_a(T_b < T_a) \nonumber
+\end{align}
+and
+\begin{align}
+\Reff = \frac{1}{C_a \pr_a(T_b < T_a)}. \nonumber
+\end{align}
+
+We use the fact that $\pi_a = C_a / C$ and multiply by $C$,
+\begin{align}
+\Reff C = \frac{1}{\pi_a \pr_a(T_b < T_a)}. \nonumber
+\end{align}
+
+Recall that $\pr_a(T_b < T_a)$ is the probability, starting from $a$,
+that we get to $b$ before returning to $a$.
+We do independent trials, starting from $a$, until we reach $b$ before $a$.
+Each ``failure'' resets the process so $\pr_a(T_b < T_a)$ is geometrically distributed.
+Then the expected value $1/\pr_a(T_b < T_a)$ is the expected number of times
+we return to $a$ before we finally reach $b$ (and again return to $a$).
+
+Recall that $\pi_a$ is the probability that $(X_t) = a$.
+By a similar argument, $1/\pi_a$ is the expected return time to $a$.
+
+Thus the expected time from $a$ to $b$ and back is
+the expected number of returns to $a$ before we reach $b$ times
+the expected number of steps for each return to $a$.
+The commute time identity follows
+\begin{align}
+E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a}\frac{1}{\pr_a(T_b < T_a)} = \Reff C.
+\label{eqn:commute}
+\end{align}
+
+\subsection{Matthews Method on Balanced Trees}
 \cite{LP17} 11.3
 
 \subsection{Spanning Tree Argument}
