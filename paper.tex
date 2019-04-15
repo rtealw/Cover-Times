@@ -105,8 +105,9 @@
 \DeclareMathOperator{\cov}{\uptau_\textrm{cov}}  % cover time variable
 \DeclareMathOperator{\tcov}{t_\textrm{cov}}      % cover time
 \DeclareMathOperator{\hit}{t_{\textrm{hit}}}     % hitting time
+\DeclareMathOperator{\tmina}{t_\textrm{min}^A}   % minimum time on A
 \DeclareMathOperator{\Ceff}{C_\textrm{eff}}      % effective conductance
-\DeclareMathOperator{\Reff}{R_{\textrm{eff}}}     % effective resistance
+\DeclareMathOperator{\Reff}{R_{\textrm{eff}}}    % effective resistance
 
 \newcommand{\todo}[1]{{\color{blue}{[{\bf TODO:} #1]}}}
 
@@ -841,6 +842,63 @@ By linearity of expectation,
 \end{align}
 
 \section{Bounds}
+
+\subsection{Commute Time Identity}
+We use the electrical network analysis in \cref{sec:electric} to 
+prove the commute time identity so we may use it to help us bound
+cover times.
+
+Define the probability $\pr_a(T_b < T_a)$ that starting at $a$
+we reach $b$ before returning to $a$.
+(Recall that $T_a>0$.)
+Now define the effective conductance $\Ceff$ as $i_a/v_a$
+and the effective resistance $\Reff$ as $1/\Ceff$.
+
+With a voltage of 1 at $a$ and 0 at $b$,
+\begin{align}
+\Ceff &= i_a/1 =
+\sum_y (v_a - v_y) C_{a,y} =
+\sum_y (v_a - v_y) \frac{C_{a,y}}{C_a} C_a \nonumber \\
+&= C_a (\frac{v_a}{C_a} \sum_y C_{a,y} - \sum_y \frac{C_{a,y}}{C_a} v_y)=
+C_a(1-\sum_y\pr_{a,y}v_y).\nonumber
+\end{align}
+
+Recall $\sum_y P_{a,y} v_y$ is the probability we reach $a$ before $b$
+so 1 minus that is the probability we reach $b$ before returning to $a$.
+
+Then
+\begin{align}
+\Ceff = C_a \pr_a(T_b < T_a) \nonumber
+\end{align}
+and
+\begin{align}
+\Reff = \frac{1}{C_a \pr_a(T_b < T_a)}. \nonumber
+\end{align}
+
+We use the fact that $\pi_a = C_a / C$ and multiply by $C$,
+\begin{align}
+\Reff C = \frac{1}{\pi_a \pr_a(T_b < T_a)}. \nonumber
+\end{align}
+
+Recall that $\pr_a(T_b < T_a)$ is the probability, starting from $a$,
+that we get to $b$ before returning to $a$.
+We do independent trials, starting from $a$, until we reach $b$ before $a$.
+Each ``failure'' resets the process so $\pr_a(T_b < T_a)$ is geometrically distributed.
+Then the expected value $1/\pr_a(T_b < T_a)$ is the expected number of times
+we return to $a$ before we finally reach $b$ (and again return to $a$).
+
+Recall that $\pi_a$ is the probability that $(X_t) = a$.
+By a similar argument, $1/\pi_a$ is the expected return time to $a$.
+
+Thus the expected time from $a$ to $b$ and back is
+the expected number of returns to $a$ before we reach $b$ times
+the expected number of steps for each return to $a$.
+The commute time identity follows
+\begin{align}
+E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a}\frac{1}{\pr_a(T_b < T_a)} = \Reff C.
+\label{eqn:commute}
+\end{align}
+
 \subsection{Matthews Method}
 We have seen that it is in general very hard
 to calculate the cover time of a random walk
@@ -852,14 +910,14 @@ bound the cover time.
 The Matthews Method is an example of a remarkably good bound \cite{LP17}.
 In fact, it is tight for the complete graph:
 the expected time between any two vertices
-is $n-1 = \hit$ and \cref{thm:matthews} gives
+is $n-1 = \hit$ and \cref{thm:matthews_up} gives
 us the main result of \cref{sec:complete}.
 
 An added benefit is that the proof uses strategies we employed on the
 simple cycle and follows an intuitive structure.
 
-\begin{theorem}
-Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matthews}
+\begin{theorem}[Matthews Upper Bound]
+Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matthews_up}
 \end{theorem}
 \begin{align}
 \tcov &\leq \hit \left(1 + \frac{1}{2} + \frac{1}{3} + ... + \frac{1}{n-1} \right). \nonumber
@@ -922,9 +980,9 @@ Since $\sigma$ is a random permutation, the probability that
 we visit $\sigma_k$ last is $1/k$.
 Formally, $P(L_k = \sigma_k) = 1/k$.
 
-Finally, consider the expected time between $T_{k-1}$ and $T_{k}$
+Finally, we find the expected time between $T_{k-1}$ and $T_{k}$
 given that last vertex we visit is $\sigma_k$.
-Certainly there exist $r$ and $s$ where $1 \leq r \neq s \leq n-1$
+Consider $r$ and $s$ where $1 \leq r \neq s \leq n-1$
 such that $L_{k-1} = r$ and $L_k = s$.
 Then $\E_n[T_k - T_{k-1} | L(k) = \sigma_k] = \E_r[T_s] \leq \hit$.
 So
@@ -938,61 +996,91 @@ Putting it all together,
 \tcov \leq \hit \left( 1+ \frac{1}{2} + ... + \frac{1}{k} 
 + ... + \frac{1}{n-1} \right). \nonumber
 \end{align}
-
 \end{proof}
 
-\subsection{Commute Time Identity}
-Recall \cref{sec:electric}.
-Define the probability $\pr_a(T_b < T_a)$ that starting at $a$
-we reach $b$ before returning to $a$.
-(Recall that $T_a>0$.)
-Now define the effective conductance $\Ceff$ as $i_a/v_a$
-and the effective resistance $\Reff$ as $1/\Ceff$.
+The same strategy for the Matthews upper bound can be used
+to find a lower bound.
+Instead of looking for all $n$ vertices, we search
+for $A \subseteq V(G)$.
+When the hitting time is large between any two vertices in $A$,
+the time to visit all of $A$ is a good lower bound on the cover time
+of $V(G)$.
 
-With a voltage of 1 at $a$ and 0 at $b$,
+\begin{theorem}[Matthews Lower Bound]
+Let $A \subseteq V(G)$. Define $\tmina = \min_{a,b\in A, a \neq b} \E_b[T_a]$.
+Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matthews_low}
+\end{theorem}
 \begin{align}
-\Ceff &= i_a/1 =
-\sum_y (v_a - v_y) C_{a,y} =
-\sum_y (v_a - v_y) \frac{C_{a,y}}{C_a} C_a \nonumber \\
-&= C_a (\frac{v_a}{C_a} \sum_y C_{a,y} - \sum_y \frac{C_{a,y}}{C_a} v_y)=
-C_a(1-\sum_y\pr_{a,y}v_y).\nonumber
+\tcov &\geq \tmina \left(1 + \frac{1}{2} + \frac{1}{3} + ... +
+\frac{1}{|A| -1} \right). \nonumber
 \end{align}
 
-Recall $\sum_y P_{a,y} v_y$ is the probability we reach $a$ before $b$
-so 1 minus that is the probability we reach $b$ before returning to $a$.
+\begin{proof}
+Without loss of generality, label the vertices $\{1, 2, ..., n\}$.
+We may assume that the walk started at vertex $x \in A$.
+Let $\sigma$ be a uniform permutation of the vertices in $A$.
+The strategy is to look for the vertices in order $\sigma$.
 
+Let $T_k$ be the first time that vertices $\sigma_1, \sigma_2, ..., \sigma_k$
+have all been visited.
+For ease of notation, set $L_k = X_{T_k}$.
+
+We again write the cover time in a clever way:
+\begin{align}
+\tcov &\geq \E_x[T_1 + (T_2 - T_1) + ... + 
+(T_k - T_{k-1}) + ... + (T_{|A|} - T_{|A|-1})] . \nonumber
+\end{align}
+
+Our goal is to bound the cover time in terms of $\tmina$.
+
+Consider the first term of the sum.
+With probability $1/|A|$, $\sigma_1 = x$ and $T_1=0$.
+Otherwise, the expected time from $x$ to $T_1$ is less than or equal to
+$\tmina$.
 Then
 \begin{align}
-\Ceff = C_a \pr_a(T_b < T_a) \nonumber
+\E_x[T_1] \geq \frac{1}{|A|}0 + \frac{|A| -1}{|A|} \tmina
+= \left(1 - \frac{1}{|A|} \right) \tmina \nonumber
 \end{align}
-and
+
+Now consider the $k^{th}$ term of the sum for $k > 1$.
+By conditional expectation,
 \begin{align}
-\Reff = \frac{1}{C_a \pr_a(T_b < T_a)}. \nonumber
+\E_x[T_k - T_{k-1}] &=
+\sum_{i=1}^k \E_x[T_k - T_{k-1} | L(k) = \sigma_i]
+P(L_k = \sigma_i). \nonumber 
 \end{align}
 
-We use the fact that $\pi_a = C_a / C$ and multiply by $C$,
+Assume that the last vertex $L_k$ to be visted among the first
+$k$ vertices is not $\sigma_k$.
+Then $\E_x[T_k-T_{k-1}|L(k) \neq \sigma_k] = 0$.
+It follows that
 \begin{align}
-\Reff C = \frac{1}{\pi_a \pr_a(T_b < T_a)}. \nonumber
+\E_x[T_k - T_{k-1}] &= 0 +
+\E_x[T_k - T_{k-1} | L(k) = \sigma_k]
+P(L_k = \sigma_k). \nonumber 
 \end{align}
 
-Recall that $\pr_a(T_b < T_a)$ is the probability, starting from $a$,
-that we get to $b$ before returning to $a$.
-We do independent trials, starting from $a$, until we reach $b$ before $a$.
-Each ``failure'' resets the process so $\pr_a(T_b < T_a)$ is geometrically distributed.
-Then the expected value $1/\pr_a(T_b < T_a)$ is the expected number of times
-we return to $a$ before we finally reach $b$ (and again return to $a$).
+Since $\sigma$ is a random permutation, $P(L_k = \sigma_k) = 1/k$.
 
-Recall that $\pi_a$ is the probability that $(X_t) = a$.
-By a similar argument, $1/\pi_a$ is the expected return time to $a$.
-
-Thus the expected time from $a$ to $b$ and back is
-the expected number of returns to $a$ before we reach $b$ times
-the expected number of steps for each return to $a$.
-The commute time identity follows
+Now find the expected time between $T_{k-1}$ and $T_{k}$
+given that last vertex we visit is $\sigma_k$.
+Consider $r, s \in A$ such that $L_{k-1} = r$ and $L_k = s$.
+Then $\E_x[T_k - T_{k-1} | L(k) = \sigma_k] = \E_r[T_s] \geq \tmina$.
+So
 \begin{align}
-E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a}\frac{1}{\pr_a(T_b < T_a)} = \Reff C.
-\label{eqn:commute}
+\E_x[T_k - T_{k-1}] &\geq
+\tmina \frac{1}{k}. \nonumber 
 \end{align}
+
+Putting it all together,
+\begin{align}
+\tcov &\geq \tmina \left( 1 - \frac{1}{|A|}+ \frac{1}{2} + ... + \frac{1}{k} 
++ ... + \frac{1}{|A|-1} + \frac{1}{|A|}\right). \nonumber \\
+&= \tmina \left( 1 + \frac{1}{2} + ... + \frac{1}{k} 
++ ... + \frac{1}{|A|-1} \right). \nonumber
+\end{align}
+\end{proof}
 
 \subsection{Matthews Method on Balanced Trees}
 \cite{LP17} 11.3
