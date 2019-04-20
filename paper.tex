@@ -101,6 +101,8 @@
 \newtheorem*{example}{Example}
 
 \DeclareMathOperator{\E}{\mathrm{E}}		     % expected value
+\DeclareMathOperator{\Var}{\mathrm{Var}}         % variance
+\DeclareMathOperator{\I}{\mathbb{1}}         % variance
 \DeclareMathOperator{\pr}{\mathrm{P}}		     % expected value
 \DeclareMathOperator{\cov}{\uptau_\textrm{cov}}  % cover time variable
 \DeclareMathOperator{\tcov}{t_\textrm{cov}}      % cover time
@@ -1192,17 +1194,197 @@ Thus
 
 
 \section{Distributional Aspects}
-\subsection{Complete Graph}
 \cite{Du11}
-Theorem 2.2.4 -> Example 2.2.5 -> Theorem 3.6.5 -> Example 3.6.6
+Consider a random walk on the complete graph with self-edges.
+Call $r$ the number of steps since we began the random walk.
+Let $A_i$ be the event that vertex $i$ is not visited and
+$N_n$ the number of unvisited vertices.
+Then
+\begin{align}
+P(A_i) = (1-1/n)^r \nonumber
+\end{align}
+and
+\begin{align}
+\E[N_n] = n(1-1/n)^r. \nonumber
+\end{align}
 
-\todo{Theorem 2.2.4}
+If $r/n \rightarrow c$, then
+\begin{align}
+\E[N_n]/n &= (1-1/n)^r = [(1-1/n)^n]^{r/n} \rightarrow (e^{-1})^c \nonumber \\
+\E[N_n]/n &\rightarrow e^{-c}. \nonumber
+\end{align}
 
-\todo{Example 2.2.5}
+We compute the variance of $N_n$.
+Let $\I_m$ be the indicator random variable for $A_m$.
+First find $E[N_n^2]$,
+\begin{align}
+\E[N_n^2] &= \E \left[ \left(\sum_{m=1}^n \I_m \right) ^2 \right] =
+\E \left[ \sum_{m=1}^n \sum_{k=1}^n \I_m \I_k \right] =
+\sum_{1 \leq k, m \leq n} \pr(A_k \cap A_m). \nonumber
+\end{align}
 
-\todo{Theorem 3.6.5}
+Then
+\begin{align}
+\Var[N_n] &= \E[N_n^2] - \E[N_n]^2 \nonumber \\
+&= \sum_{1 \leq k, m \leq n} \pr(A_k \cap A_m) - P(A_k)P(A_m) \nonumber \\
+&= n(n-1) \{ \pr(A_k \cap A_m) - P(A_k)P(A_m) \} + 
+n \{ \pr(A_k \cap A_m) - P(A_k)P(A_m) \} \nonumber \\
+&= n(n-1) \{ (1-2/n)^r - (1-1/n)^{2r} \} + 
+n \{ (1-1/n)^r  - (1-1/n)^{2r} \}. \nonumber
+\end{align}
+where $k\neq m$ in the first term and $k=m$ in the second.
 
-\todo{Example 3.6.6}
+As $n \rightarrow \infty$,
+\begin{align}
+\Var(N_n/n) &= \Var(N_n) / n^2 \nonumber\\
+&\rightarrow (1-2/n)^r - (1-1/n)^{2r} = e^{-2c} - (e^{-c})^2 = 0. \nonumber
+\end{align}
+
+By Chebyshev's Inequality,
+\begin{align}
+\pr \left( |N_n/n - \E[N_n/n]| \geq \epsilon \right) &\leq \Var(N_n/n) / \epsilon^2
+\rightarrow 0. \nonumber
+\end{align}
+
+Thus we conclude $N_n/n \rightarrow \E[N_n/n] = e^{-c}$ in probability. 
+
+The Poisson approximation of the binomial implies that if $n \rightarrow \infty$
+and $r/n \rightarrow c$, then the number of visits to each vertex will approach
+a Poisson distribution with mean $c$.
+Then it intuitively follows that the proportion of visits to each vertex
+approaches $e^{-c}$.
+
+\begin{theorem}\label{thm:pois}
+If $ne^{-r/n} \rightarrow \lambda \in [0, \infty)$, then the number of unvisited
+vertices approaches a Poisson distribution with mean $\lambda$.
+\end{theorem}
+
+\begin{proof}
+Observe that the probability that there are $k$ unvisited vertices
+\begin{align}
+(1-k/n)^r \nonumber.
+\end{align}
+
+Define $p_m(r,n)$ as the probability that exactly $m$ vertices are unvisited
+when $r$ steps have been taken.
+Then the probability that all vertices have been visited is the complement
+of the probability that at least one vertex has not been visited.
+
+By the principle of inclusion-exclusion,
+\begin{align}
+p_0(r,n) &= {n \choose 0} 1^r - {n \choose 1} (1-1/n)^r + ... \nonumber\\
+&= \sum_{k=0}^n (-1)^k {n \choose k} (1-k/n)^r. \nonumber
+\end{align}
+
+If we consider the locations of the unvisited vertices,
+\begin{align}
+p_m(r,n) = {n \choose m} \left(1-\frac{m}{n}\right)^r p_0(r, n-m). \nonumber
+\end{align}
+
+We want to show that 
+\begin{align}
+{n \choose m} \left(1-\frac{m}{n}\right)^r \rightarrow \lambda ^m /m! \nonumber
+\end{align}
+
+We begin with the more straightforward upper bound.
+Notice that $(1-x) \leq e^{-x}$ and recall our assumption that
+$ne^{r/n} \rightarrow \lambda$.
+Then
+\begin{align}
+{n \choose m} \left(1-\frac{m}{n}\right)^r &\leq \frac{n^m}{m!} e^{mr/n} \nonumber \\
+&= \frac{(n e^{r/n})^m} {m!} \nonumber \\
+&\rightarrow \lambda ^m / m! \nonumber
+\end{align}
+
+We now turn to the more tricky lower bound.
+Notice that ${n \choose m} \geq (n-m)^m / m!$
+\todo{why?}
+Then
+\begin{align}
+{n \choose m} \left(1-\frac{m}{n}\right)^r &\geq \left(1-\frac{m}{n}\right)^r (n-m)^m / m! \nonumber\\
+&\geq n^m (1 - \frac{m}{n})^r (1- \frac{m}{n})^m  / m! \nonumber
+\end{align}
+
+As $n \rightarrow \infty$, $\left(1-\frac{m}{n}\right)^m \rightarrow 1$ and $1/m!$ is constant.
+We use the Taylor series of $\log(1-t)$ for $0 \leq t \leq 1/2$
+to bound the rest.
+So
+\begin{align}
+\log(1-t) &= 0 - t - t^2/2 -t^3/3 - ... \nonumber\\
+&\geq -t -t^2/2(1 + 1/2 + 1/4 + ...) = -t - t^2 \nonumber
+\end{align}
+and we have
+\begin{align}
+\log \left(n^m\left(1-\frac{m}{n}\right)^r \right)
+&= m \log n + r \log\left(1-\frac{m}{n}\right) \nonumber \\
+& \geq m \log n - r m /n - r m/n^2. \nonumber
+\end{align}
+
+\todo{why?}
+Our assumption that $ne^{r/n} \rightarrow \lambda$ implies that
+\begin{align}
+r = n \log n - n \log \lambda + o(n) \nonumber
+\end{align}
+so $r(m/n)^2 \rightarrow 0$.
+Then
+\begin{align}
+rm/n &=m \log n - m \log \lambda + o(n)m/n \nonumber \\
+m \log \lambda &\rightarrow m \log n - rm/n \nonumber
+\end{align}
+and
+\begin{align}
+\log \left(n^m\left(1-\frac{m}{n}\right)^r \right)
+&\geq m \log n - rm/n \nonumber
+\end{align}
+so
+\begin{align}
+\lim_{n\rightarrow \infty} n^m\left(1-\frac{m}{n}\right)^r
+&\geq \lambda^m. \nonumber
+\end{align}
+
+Now we piece together the pieces.
+To begin,
+\begin{align}
+{ n \choose m } (1-\frac{m}{n})^r \rightarrow \lambda^m /m! \nonumber
+\end{align}
+so
+\begin{align}
+p_0(r,n) \rightarrow \sum_{k=0}^\infty \lambda^k /k! = e^{-\lambda}. \nonumber
+\end{align}
+
+The result holds
+\begin{align}
+p_0(r,n-m) \rightarrow e^{-\lambda} \nonumber
+\end{align}
+for fixed $m$ since $(n-m)e^{r/(n-m)} \rightarrow \lambda$.
+
+Finally,
+\begin{align}
+p_m(r,n) &= {n \choose m} (1-\frac{m}{n})^r p_0(r, n-m) \nonumber \\
+&\rightarrow \frac{\lambda^m}{ m!} e^{-\lambda} \nonumber
+\end{align}
+so we have that $N_n \rightarrow \textrm{Pois}(\lambda)$ as claimed.
+
+\end{proof}
+
+
+
+Set $r = n \log n + nx$.
+Then 
+\begin{align}
+ne^{-r/n} &= n e ^{- \log n - x} \nonumber \\
+&= n e {- \log n} e^ {- x} = e^{-x}\nonumber
+\end{align}
+
+Consider the cover time variable $\cov$.
+Since $\cov \leq m$ if and only if the first $m$ steps
+of the random walk visit all $n$ vertices, then by \cref{thm:pois},
+\begin{align}
+\pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber \\
+\pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}} \nonumber
+\end{align}
+
+
 
 
 \section{Simulation}
