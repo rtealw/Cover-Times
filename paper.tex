@@ -108,8 +108,11 @@
 \DeclareMathOperator{\tmina}{t_\textrm{min}^A}   % minimum time on A
 \DeclareMathOperator{\Ceff}{C_\textrm{eff}}      % effective conductance
 \DeclareMathOperator{\Reff}{R_{\textrm{eff}}}    % effective resistance
+\DeclareMathOperator{\Rxy}{R_{\textrm{x,y}}}     % effective resistance between x,y
+\DeclareMathOperator{\T}{\mathcal{T}}            % spanning tree
 
-\newcommand{\todo}[1]{{\color{blue}{[{\bf TODO:} #1]}}}
+
+\newcommand{\todo}[1]{{\color{blue}{[{\bf todo:} #1]}}}
 
 \begin{document}
 
@@ -146,12 +149,14 @@ graph connectivity
 protocol testing
 
 \subsection{Definitions}
-We consider an undirected graph $G$ without self loops or multi-edges.
+We consider an undirected, connected graph $G$ without self loops or multi-edges.
 Let $V(G)$ be the set of vertices and let $E(G)$ be the set of edges on $G$.
 Then $n$ is the number of vertices $|V(G)|$.
+We say $i\sim j$ for $i$ and $j$ in the vertex set $V(G)$ if $(i,j)$ in $E(G)$.
+Assume that each vertex is accessible from every other vertex.
+That is, there is a set of edges from any $x$ to any $y$.
 %Without loss of generality, we label the vertices $\{1, 2, 3, ..., n\}$.
 
-We say $i\sim j$ for $i$ and $j$ in the vertex set $V(G)$ if $(i,j)$ in $E(G)$.
 Let $C_{i,j}$ be the non-negative weight of the edge between vertices $i$ and $j$.
 We will mostly consider unweighted graphs
 with $C_{i,j} = 1$ if $i \sim j$ and $C_{i,j} = 0$ otherwise.
@@ -843,7 +848,7 @@ By linearity of expectation,
 
 \section{Bounds}
 
-\subsection{Commute Time Identity}
+\subsection{Commute Time Identity} \label{sec:commute}
 We use the electrical network analysis in \cref{sec:electric} to 
 prove the commute time identity so we may use it to help us bound
 cover times.
@@ -1082,20 +1087,122 @@ Putting it all together,
 \end{align}
 \end{proof}
 
-\subsection{Matthews Method on Balanced Trees}
-\cite{LP17} 11.3
+\subsection{Matthews Method on Binary Trees}
+\todo{graph example of binary tree}
+
+\cite{LP17}
+Consider a complete unweighted binary tree with a single root $\rho$.
+Each vertex has two children if it is distance less than $k$
+from the root and no children if it is a leaf (at distance $k$ from the root).
+There are $n = 1 + 2 + 4 + ... + 2^k = 2^{k+1} - 1$ vertices.
+
+By \cref{eqn:commute}, the commute time between the root  and a leaf $a$ is
+\begin{align}
+C R_{\rho, a} = 2 (n-1) k \nonumber
+\end{align}
+Note that the resistance adds in series so $\Rxy = i$ where $i$
+is the length of the single path between $x$ and $y$.
+
+The maximum hitting distance is between two vertices whose 
+mose recent common ancestor is the root.
+For this pair, the hitting time is the same as the commute time
+to the root by symmetry.
+Consider $a$ and $b$ two leaves whose most recent common ancestor
+is the root.
+Then
+\begin{align}
+\E_a [T_b] = \E_a [T_\rho] + \E_\rho [T_a] = 2 (n-1) k \nonumber
+\end{align}
+
+and \cref{thm:matthews_up} gives
+\begin{align}
+\tcov \leq 2(n-1)k\left(1 + \frac{1}{2} + ... + \frac{1}{n} \right). \nonumber
+\end{align}
+
+\todo{add lower bound}
 
 \subsection{Spanning Tree Argument}
-\cite{AF14} 3.2
+\cite{AF14}
+We introduce the concept of a spanning tree to create
+another upper bound for the cover time of a random walk.
 
-Edge commute inequality
+\todo{graph example of spanning tree}
 
-spanning trees
+A spanning tree $\T$ is a subset of a graph with all edges
+in $V(G)$ connected by the minimum number of edges in $E(G)$.
+For the connected graphs we consider, the minimum number of edges
+needed to connect all vertices is $n-1$.
+Formally, $V(\T) = V(G)$ and $E(\T) \subseteq E(G)$
+such that $|E(\T)| = n-1$ and $\T$ is connected.
+
+In \cref{sec:commute}, we fixed vertices $a$ and $b$ and called
+the effective resistance between them $\Reff$.
+We now consider $\Rxy$ the effective resistance between vertices $x$ and $y$.
+
+\begin{theorem}[Spanning Tree Upper Bound] \label{thm:span}
+For any spanning tree $\T$ on a weighted graph,
+\begin{align}
+\tcov \leq C \sum_{x,y \in E(\T)} \Rxy \leq C \sum_{x,y \in E(\T)} 1 / C_{x,y}. \nonumber
+\end{align}
+In particular for an unweighted graph,
+\begin{align}
+\tcov \leq 2 |E(G)| (n-1). \nonumber 
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Given a spanning tree $\T$, there exists a vertex $v$ with only one edge.
+Consider the path $v_0, v_1, ..., v_{2n-2}$ where $v=v_0=v_{2n-2}$
+that traverses each edge in the spanning once in each direction
+and covers every vertex.
+We construct this path by starting at $v$ and walking along all $n-1$ edges to the
+other vertex with only one edge and then coming back to $v$.
+
+The expected time of this particular path on the original graph is certainly less than
+or equal to the cover time. Thus
+\begin{align}
+\tcov &\leq \sum_{i=0}^{2n-3} \E_{v_i}[T_{v_{i+1}}]. \nonumber
+\end{align}
+
+We rewrite the sum in terms of commute times,
+\begin{align}
+\tcov &\leq \sum_{x,y \in E(\T)} \E_x[T_y] + \E_y[T_x]. \nonumber
+\end{align}
+
+Using \cref{eqn:commute}, $E_x[T_y] + \E_y[T_x] = C \Rxy$,
+\begin{align}
+\tcov &\leq C \sum_{x,y \in E(\T)} \Rxy. \nonumber
+\end{align}
+
+Observe that if $x \sim y$,
+the effective conductance between $x$ and $y$ is at least $C_{x,y}$
+since each additional path only increases the flow.
+It follows that the effective resistance between $x$ and $y$ is at most $1 / C_{x,y}$ so
+\begin{align}
+\tcov &\leq C \sum_{x,y \in E(\T)} 1 / C_{x,y}. \nonumber
+\end{align}
+
+If the graph is unweighted, then $C_{x,y} = 1$ and $C = 2 |E(G)|$.
+Thus
+\begin{align}
+\tcov \leq 2 |E(G)| (n-1). \nonumber
+\end{align}
+
+\end{proof}
+
 
 \section{Distributional Aspects}
 \subsection{Complete Graph}
 \cite{Du11}
 Theorem 2.2.4 -> Example 2.2.5 -> Theorem 3.6.5 -> Example 3.6.6
+
+\todo{Theorem 2.2.4}
+
+\todo{Example 2.2.5}
+
+\todo{Theorem 3.6.5}
+
+\todo{Example 3.6.6}
 
 
 \section{Simulation}
