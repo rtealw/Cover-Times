@@ -1090,15 +1090,52 @@ Putting it all together,
 \end{proof}
 
 \subsection{Matthews Method on Binary Trees}
-\todo{graph example of binary tree}
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[scale = 2]
+	    \tikzstyle{vertex}=[draw, circle,fill=black, scale=.7]
+	    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+	    \node[vertex] (0) at (0,3) {};
+	    \node[vertex] (1) at (1,2) {};
+	    \node[vertex] (2) at (-1,2) {};
+	    \node[vertex] (3) at (1.5,1) {};
+	    \node[vertex] (4) at (.5,1) {};
+	    \node[vertex] (5) at (-.5,1) {};
+	    \node[vertex] (6) at (-1.5,1) {};
+	    \node[vertex] (7) at (1.75,0) {};
+	    \node[vertex] (8) at (1.25,0) {};
+	    \node[vertex] (9) at (.75,0) {};
+	    \node[vertex] (10) at (.25,0) {};
+	    \node[vertex] (11) at (-.25,0) {};
+	    \node[vertex] (12) at (-.75,0) {};
+	    \node[vertex] (13) at (-1.25,0) {};
+	    \node[vertex] (14) at (-1.75,0) {};
+	    \draw[edge] (1) -- (0);
+	    \draw[edge] (2) -- (0);
+	    \draw[edge] (1) -- (3);
+	    \draw[edge] (4) -- (1);
+	    \draw[edge] (2) -- (5);
+	    \draw[edge] (6) -- (2);
+	    \draw[edge] (3) -- (7);
+	    \draw[edge] (3) -- (8);
+	    \draw[edge] (4) -- (9);
+	    \draw[edge] (4) -- (10);
+	    \draw[edge] (5) -- (11);
+	    \draw[edge] (5) -- (12);
+	    \draw[edge] (6) -- (13);
+	    \draw[edge] (6) -- (14);
+	\end{tikzpicture}
+	\caption{A binary tree with $k=3$ and $n=15$.}\label{fig:binary}
+\end{figure}
 
 \cite{LP17}
-Consider a complete unweighted binary tree with a single root $\rho$.
-Each vertex has two children if it is distance less than $k$
-from the root and no children if it is a leaf (at distance $k$ from the root).
+Consider an unweighted binary tree as in \cref{fig:binary} with a single root $\rho$.
+A vertex has two children if it is distance less than $k$
+from the root and no children if it is a leaf (distance $k$ from the root).
 There are $n = 1 + 2 + 4 + ... + 2^k = 2^{k+1} - 1$ vertices.
 
-By \cref{eqn:commute}, the commute time between the root  and a leaf $a$ is
+By \cref{eqn:commute}, the commute time between the root and a leaf $a$ is
 \begin{align}
 C R_{\rho, a} = 2 (n-1) k \nonumber
 \end{align}
@@ -1128,14 +1165,35 @@ and \cref{thm:matthews_up} gives
 We introduce the concept of a spanning tree to create
 another upper bound for the cover time of a random walk.
 
-\todo{graph example of spanning tree}
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[scale = 2]
+	    \tikzstyle{vertex}=[draw, circle,fill=black, scale=.7]
+	    \tikzstyle{edge}=[draw,line width = .25pt,-,black!100]
+	    \tikzstyle{span}=[draw,line width = 2pt,-,black!100]
+	    \node[vertex] (0) at (0,0) {};
+	    \node[vertex] (1) at (1,0) {};
+	    \node[vertex] (2) at (1,1) {};
+	    \node[vertex] (3) at (0,1) {};
+	    \draw[span] (0) -- (1);
+	    \draw[edge] (0) -- (2);
+	    \draw[edge] (0) -- (3);
+	    \draw[span] (1) -- (2);
+	    \draw[edge] (1) -- (3);
+	    \draw[span] (2) -- (3);
+	\end{tikzpicture}
+	\caption{A spanning tree of the complete graph with $n=4$.}\label{fig:span}
+\end{figure}
 
 A spanning tree $\T$ is a subset of a graph with all edges
 in $V(G)$ connected by the minimum number of edges in $E(G)$.
+\cref{fig:span} is an example where the bold edges indicate the edges in $E(\T)$
+and the light edges indicate the edges in $E(G)$ but not $E(\T)$.
 For the connected graphs we consider, the minimum number of edges
 needed to connect all vertices is $n-1$.
 Formally, $V(\T) = V(G)$ and $E(\T) \subseteq E(G)$
 such that $|E(\T)| = n-1$ and $\T$ is connected.
+
 
 In \cref{sec:commute}, we fixed vertices $a$ and $b$ and called
 the effective resistance between them $\Reff$.
@@ -1161,7 +1219,7 @@ We construct this path by starting at $v$ and walking along all $n-1$ edges to t
 other vertex with only one edge and then coming back to $v$.
 
 The expected time of this particular path on the original graph is certainly less than
-or equal to the cover time. Thus
+or equal to the cover time. That is,
 \begin{align}
 \tcov &\leq \sum_{i=0}^{2n-3} \E_{v_i}[T_{v_{i+1}}]. \nonumber
 \end{align}
@@ -1171,7 +1229,7 @@ We rewrite the sum in terms of commute times,
 \tcov &\leq \sum_{x,y \in E(\T)} \E_x[T_y] + \E_y[T_x]. \nonumber
 \end{align}
 
-Using \cref{eqn:commute}, $E_x[T_y] + \E_y[T_x] = C \Rxy$,
+Using \cref{eqn:commute}, we have $E_x[T_y] + \E_y[T_x] = C \Rxy$ and,
 \begin{align}
 \tcov &\leq C \sum_{x,y \in E(\T)} \Rxy. \nonumber
 \end{align}
@@ -1185,7 +1243,7 @@ It follows that the effective resistance between $x$ and $y$ is at most $1 / C_{
 \end{align}
 
 If the graph is unweighted, then $C_{x,y} = 1$ and $C = 2 |E(G)|$.
-Thus
+Then
 \begin{align}
 \tcov \leq 2 |E(G)| (n-1). \nonumber
 \end{align}
@@ -1195,7 +1253,8 @@ Thus
 
 \section{Distributional Aspects}
 \cite{Du11}
-Consider a random walk on the complete graph with self-edges.
+We consider the distribution of the cover time of a random walk
+on the complete graph with self edges.
 Call $r$ the number of steps since we began the random walk.
 Let $A_i$ be the event that vertex $i$ is not visited and
 $N_n$ the number of unvisited vertices.
@@ -1210,20 +1269,24 @@ and
 
 If $r/n \rightarrow c$, then
 \begin{align}
-\E[N_n]/n &= (1-1/n)^r = [(1-1/n)^n]^{r/n} \rightarrow (e^{-1})^c \nonumber \\
-\E[N_n]/n &\rightarrow e^{-c}. \nonumber
+\E[N_n]/n &= (1-1/n)^r = [(1-1/n)^n]^{r/n} \rightarrow (e^{-1})^c
+\rightarrow e^{-c}. \nonumber
 \end{align}
 
-We compute the variance of $N_n$.
-Let $\I_m$ be the indicator random variable for $A_m$.
-First find $E[N_n^2]$,
+We compute the variance of $N_n$ by finding $\E[N_n^2]$ and $\E[N_n]^2$.
+Let $\I_m$ be the indicator random variable for event $A_m$.
+That is, $\I_m = 1$ if vertex $m$ is unvisited 0 otherwise.
+We already know $\E[N_n]$ so we want to find $\E[N_n^2]$,
 \begin{align}
 \E[N_n^2] &= \E \left[ \left(\sum_{m=1}^n \I_m \right) ^2 \right] =
 \E \left[ \sum_{m=1}^n \sum_{k=1}^n \I_m \I_k \right] =
 \sum_{1 \leq k, m \leq n} \pr(A_k \cap A_m). \nonumber
 \end{align}
 
-Then
+The second equality holds since we distribute terms.
+The third equality holds since the mean of an indicator for event $A_m$
+is the probability of $A_m$.
+Putting both terms together, we find the variance
 \begin{align}
 \Var[N_n] &= \E[N_n^2] - \E[N_n]^2 \nonumber \\
 &= \sum_{1 \leq k, m \leq n} \pr(A_k \cap A_m) - P(A_k)P(A_m) \nonumber \\
@@ -1246,21 +1309,22 @@ By Chebyshev's Inequality,
 \rightarrow 0. \nonumber
 \end{align}
 
-Thus we conclude $N_n/n \rightarrow \E[N_n/n] = e^{-c}$ in probability. 
+Thus we conclude that $N_n/n \rightarrow \E[N_n/n] = e^{-c}$ in probability. 
 
 The Poisson approximation of the binomial implies that if $n \rightarrow \infty$
 and $r/n \rightarrow c$, then the number of visits to each vertex will approach
 a Poisson distribution with mean $c$.
-Then it intuitively follows that the proportion of visits to each vertex
+We can use this to intuite our conclusion: the proportion of visits to each vertex
 approaches $e^{-c}$.
 
+We prove the following theorem and then use it to show that $\cov \sim \textrm{Pois}(e^{-x})$.
 \begin{theorem}\label{thm:pois}
 If $ne^{-r/n} \rightarrow \lambda \in [0, \infty)$, then the number of unvisited
 vertices approaches a Poisson distribution with mean $\lambda$.
 \end{theorem}
 
 \begin{proof}
-Observe that the probability that there are $k$ unvisited vertices
+Observe that the probability that there are $k$ unvisited vertices is
 \begin{align}
 (1-k/n)^r \nonumber.
 \end{align}
@@ -1281,19 +1345,22 @@ If we consider the locations of the unvisited vertices,
 p_m(r,n) = {n \choose m} \left(1-\frac{m}{n}\right)^r p_0(r, n-m). \nonumber
 \end{align}
 
-We want to show that 
+Our strategy is to show that $p_m(r,n) \rightarrow \frac{\lambda^m}{m!}e^{-\lambda}$.
+The first step is to prove that
 \begin{align}
 {n \choose m} \left(1-\frac{m}{n}\right)^r \rightarrow \lambda ^m /m! \nonumber
 \end{align}
 
-We begin with the more straightforward upper bound.
+We bound the expression from the top and the bottom and use the dominated convergence
+theorem.
+We will first show the upper bound.
 Notice that $(1-x) \leq e^{-x}$ and recall our assumption that
 $ne^{r/n} \rightarrow \lambda$.
 Then
 \begin{align}
 {n \choose m} \left(1-\frac{m}{n}\right)^r &\leq \frac{n^m}{m!} e^{mr/n} \nonumber \\
 &= \frac{(n e^{r/n})^m} {m!} \nonumber \\
-&\rightarrow \lambda ^m / m! \nonumber
+&\rightarrow \frac{\lambda ^m} {m!} \nonumber
 \end{align}
 
 We now turn to the more tricky lower bound.
@@ -1305,15 +1372,16 @@ Then
 &\geq n^m (1 - \frac{m}{n})^r (1- \frac{m}{n})^m  / m! \nonumber
 \end{align}
 
-As $n \rightarrow \infty$, $\left(1-\frac{m}{n}\right)^m \rightarrow 1$ and $1/m!$ is constant.
+As $n \rightarrow \infty$, $\left(1-\frac{m}{n}\right)^m \rightarrow 1$
+and $1/m!$ is constant.
 We use the Taylor series of $\log(1-t)$ for $0 \leq t \leq 1/2$
-to bound the rest.
-So
+to bound the rest of the term.
+Notice that
 \begin{align}
 \log(1-t) &= 0 - t - t^2/2 -t^3/3 - ... \nonumber\\
 &\geq -t -t^2/2(1 + 1/2 + 1/4 + ...) = -t - t^2 \nonumber
 \end{align}
-and we have
+and so we have
 \begin{align}
 \log \left(n^m\left(1-\frac{m}{n}\right)^r \right)
 &= m \log n + r \log\left(1-\frac{m}{n}\right) \nonumber \\
@@ -1328,21 +1396,24 @@ r = n \log n - n \log \lambda + o(n) \nonumber
 so $r(m/n)^2 \rightarrow 0$.
 Then
 \begin{align}
-rm/n &=m \log n - m \log \lambda + o(n)m/n \nonumber \\
+rm/n &=m \log n - m \log \lambda + o(n)m/n \nonumber
+\end{align}
+and in particular
+\begin{align}
 m \log \lambda &\rightarrow m \log n - rm/n \nonumber
 \end{align}
-and
+so
 \begin{align}
 \log \left(n^m\left(1-\frac{m}{n}\right)^r \right)
-&\geq m \log n - rm/n \nonumber
+&\geq m \log n - rm/n. \nonumber
 \end{align}
-so
+It follows that
 \begin{align}
 \lim_{n\rightarrow \infty} n^m\left(1-\frac{m}{n}\right)^r
 &\geq \lambda^m. \nonumber
 \end{align}
 
-Now we piece together the pieces.
+Now we put together the pieces.
 To begin,
 \begin{align}
 { n \choose m } (1-\frac{m}{n})^r \rightarrow \lambda^m /m! \nonumber
@@ -1352,11 +1423,11 @@ so
 p_0(r,n) \rightarrow \sum_{k=0}^\infty \lambda^k /k! = e^{-\lambda}. \nonumber
 \end{align}
 
-The result holds
+The result holds for
 \begin{align}
 p_0(r,n-m) \rightarrow e^{-\lambda} \nonumber
 \end{align}
-for fixed $m$ since $(n-m)e^{r/(n-m)} \rightarrow \lambda$.
+since $m$ is fixed and $(n-m)e^{r/(n-m)} \rightarrow \lambda$.
 
 Finally,
 \begin{align}
@@ -1373,15 +1444,18 @@ Set $r = n \log n + nx$.
 Then 
 \begin{align}
 ne^{-r/n} &= n e ^{- \log n - x} \nonumber \\
-&= n e {- \log n} e^ {- x} = e^{-x}\nonumber
+&= n e {- \log n} e^ {- x} = e^{-x}.\nonumber
 \end{align}
 
 Consider the cover time variable $\cov$.
 Since $\cov \leq m$ if and only if the first $m$ steps
 of the random walk visit all $n$ vertices, then by \cref{thm:pois},
 \begin{align}
-\pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber \\
-\pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}} \nonumber
+\pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber
+\end{align}
+and
+\begin{align}
+\pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}}. \nonumber
 \end{align}
 
 
