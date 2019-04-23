@@ -133,7 +133,7 @@
 \maketitle
 %-Title
 
-\abstract{abstract}
+\abstract{\todo{abstract}}
 
 \newpage
 \tableofcontents
@@ -141,14 +141,18 @@
 \newpage
 \section{Introduction and Background}
 
+\todo{write general introduction to cover times}
 "white screen" problem
 numerous applications
 many mathematical tools
 
 \subsection{Motivation}
+\todo{write about applications}
 universal travel sequences
 graph connectivity
 protocol testing
+birthday problem
+coupon collectors
 
 \subsection{Definitions}
 We consider an undirected, connected graph $G$ without self loops or multi-edges.
@@ -263,6 +267,8 @@ We can probabilistically verify that $v_x = \sum_y \pr_{x,y} v_y$
 using first step analysis on the probability of reaching $a$ before $b$.
 
 \subsection{Outline}
+
+\todo{outline of each section and subsections}
 
 
 \section{Cover Times of Structured Graphs}
@@ -548,7 +554,7 @@ from $i-1$ to $i$ unique vertices (excluding the current vertex).
 
 We write the cover time in terms of $X_i$ and use linearity of expectation.
 \begin{align}
-\tcov&= \E[X_1+X_2+X_3+...+X_{n+1}] = \sum_{i=1}^n \E[X_i] \nonumber
+\tcov&= \E[X_1+X_2+X_3+\ldots+X_{n+1}] = \sum_{i=1}^n \E[X_i] \nonumber
 \end{align}
 
 The random variable $X_i$ takes value $k$ when $k-1$ steps lead us to
@@ -569,7 +575,7 @@ It follows that $\E[X_i] = (ln-1)(n-i)$.
 Then
 \begin{align}
 \tcov&=   \sum_{i=1}^n \frac{n-1}{n-i} \nonumber \\
-&=  (n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+...+1\right). \nonumber
+&=  (n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+\ldots+1\right). \nonumber
 \end{align}
 
 A natural interpretation of the cover time on a complete graph is 
@@ -588,7 +594,7 @@ We apply our approach to the complete graph and substitute the $r$ possible coup
 we can find for the $n-1$ vertices we could move to.
 Then
 \begin{align}
-\tcov&=  r \left(\frac{1}{r}+\frac{1}{r-1}+...+1\right). \nonumber
+\tcov&=  r \left(\frac{1}{r}+\frac{1}{r-1}+\ldots+1\right). \nonumber
 \end{align}
 
 Another more subtle application of the cover time on a complete graph
@@ -631,7 +637,7 @@ in two steps: one step to each leaf and one step back.
 We apply our approach to the complete graph and conclude that
 
 \begin{align}
-\tcov&= 2(n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+...+1\right). \nonumber
+\tcov&= 2(n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+\ldots+1\right). \nonumber
 \end{align}
 
 \subsection{Line Graph}
@@ -737,7 +743,7 @@ $\sum_{i}^{i-1} i = (i-1)i/2$.
 We add all $i-1$ equations:
 
 \begin{align}
-(e_i - e_1) &= (i-1) e_1 - 2[1+2+...+i-1] \nonumber \\
+(e_i - e_1) &= (i-1) e_1 - 2[1+2+\ldots+i-1] \nonumber \\
 e_i &= i(N-1) - 2 \frac{(i-1)i}{2} \nonumber\\
 &= i(N-1 - i + 1) = i(N-i)
 \label{eq:line}
@@ -761,7 +767,7 @@ By symmetry, $\E_0[T_N] = \E_N[T_0]$.
 
 We write
 \begin{align}
-\E_0[T_N] &= \E_0[T_1] + \E_1[T_2] + ... + \E_{i}[T_{i+1}] + ... + \E_{N-1}[T_N]. \nonumber
+\E_0[T_N] &= \E_0[T_1] + \E_1[T_2] + \ldots + \E_{i}[T_{i+1}] + \ldots + \E_{N-1}[T_N]. \nonumber
 \end{align}
 
 where $\E_{i}[T_{i+1}]$ is the expected time from state $i$ to $i+1$.
@@ -785,7 +791,7 @@ E_i[T_{i+1}] &= E_{i-1}[T_{i}] + 2 = E_{i-2}[T_{i-1}] + 4 \nonumber\\
 
 Then
 \begin{align}
-\E_0[T_N] &= 1 + 3 + ... + 2i - 1 + ... + 2(N-1) -1 \nonumber \\
+\E_0[T_N] &= 1 + 3 + \ldots + 2i - 1 + \ldots + 2(N-1) -1 \nonumber \\
 &= N^2 \nonumber
 \end{align}
 
@@ -927,27 +933,27 @@ simple cycle and follows an intuitive structure.
 Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matthews_up}
 \end{theorem}
 \begin{align}
-\tcov &\leq \hit \left(1 + \frac{1}{2} + \frac{1}{3} + ... + \frac{1}{n-1} \right). \nonumber
+\tcov &\leq \hit \left(1 + \frac{1}{2} + \frac{1}{3} + \ldots + \frac{1}{n-1} \right). \nonumber
 \end{align}
 
 \begin{proof}
-Without loss of generality, label the vertices $\{1, 2, ..., n\}$.
+Without loss of generality, label the vertices $\{1, 2, \ldots, n\}$.
 We may assume that the walk started at vertex $n$.
 Let $\sigma$ be a uniform permutation of the unvisited $n-1$ vertices.
 The strategy is to look for the vertices in order $\sigma$.
 
-Let $T_k$ be the first time that vertices $\sigma_1, \sigma_2, ..., \sigma_k$
+Let $T_k$ be the first time that vertices $\sigma_1, \sigma_2, \ldots, \sigma_k$
 have all been visited.
 For ease of notation, set $L_k = X_{T_k}$ to be the last state among 
-$\sigma_1, \sigma_2, ..., \sigma_k$ to be visited the first
+$\sigma_1, \sigma_2, \ldots, \sigma_k$ to be visited the first
 time they are all visited.
 
 We begin by writing the cover time in a clever way
 (similar to the strategy we employed on the cycle graph):
 \begin{align}
 \tcov &= \E_n[{T_{n-1}}]  \nonumber \\
-&= \E_n[T_1 + (T_2 - T_1) + ... + 
-(T_k - T_{k-1}) + ... + (T_{n-1} - T_{n-2})] . \nonumber
+&= \E_n[T_1 + (T_2 - T_1) + \ldots + 
+(T_k - T_{k-1}) + \ldots + (T_{n-1} - T_{n-2})] . \nonumber
 \end{align}
 
 Our goal is to bound the cover time in terms of the hitting time.
@@ -1000,8 +1006,8 @@ So
 
 Putting it all together,
 \begin{align}
-\tcov \leq \hit \left( 1+ \frac{1}{2} + ... + \frac{1}{k} 
-+ ... + \frac{1}{n-1} \right). \nonumber
+\tcov \leq \hit \left( 1+ \frac{1}{2} + \ldots + \frac{1}{k} 
++ \ldots + \frac{1}{n-1} \right). \nonumber
 \end{align}
 \end{proof}
 
@@ -1018,24 +1024,24 @@ Let $A \subseteq V(G)$. Define $\tmina = \min_{a,b\in A, a \neq b} \E_b[T_a]$.
 Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matthews_low}
 \end{theorem}
 \begin{align}
-\tcov &\geq \tmina \left(1 + \frac{1}{2} + \frac{1}{3} + ... +
+\tcov &\geq \tmina \left(1 + \frac{1}{2} + \frac{1}{3} + \ldots +
 \frac{1}{|A| -1} \right). \nonumber
 \end{align}
 
 \begin{proof}
-Without loss of generality, label the vertices $\{1, 2, ..., n\}$.
+Without loss of generality, label the vertices $\{1, 2, \ldots, n\}$.
 We may assume that the walk started at vertex $x \in A$.
 Let $\sigma$ be a uniform permutation of the vertices in $A$.
 The strategy is to look for the vertices in order $\sigma$.
 
-Let $T_k$ be the first time that vertices $\sigma_1, \sigma_2, ..., \sigma_k$
+Let $T_k$ be the first time that vertices $\sigma_1, \sigma_2, \ldots, \sigma_k$
 have all been visited.
 For ease of notation, set $L_k = X_{T_k}$.
 
 We again write the cover time in a clever way:
 \begin{align}
-\tcov &\geq \E_x[T_1 + (T_2 - T_1) + ... + 
-(T_k - T_{k-1}) + ... + (T_{|A|} - T_{|A|-1})] . \nonumber
+\tcov &\geq \E_x[T_1 + (T_2 - T_1) + \ldots + 
+(T_k - T_{k-1}) + \ldots + (T_{|A|} - T_{|A|-1})] . \nonumber
 \end{align}
 
 Our goal is to bound the cover time in terms of $\tmina$.
@@ -1082,10 +1088,10 @@ So
 
 Putting it all together,
 \begin{align}
-\tcov &\geq \tmina \left( 1 - \frac{1}{|A|}+ \frac{1}{2} + ... + \frac{1}{k} 
-+ ... + \frac{1}{|A|-1} + \frac{1}{|A|}\right). \nonumber \\
-&= \tmina \left( 1 + \frac{1}{2} + ... + \frac{1}{k} 
-+ ... + \frac{1}{|A|-1} \right). \nonumber
+\tcov &\geq \tmina \left( 1 - \frac{1}{|A|}+ \frac{1}{2} + \ldots + \frac{1}{k} 
++ \ldots + \frac{1}{|A|-1} + \frac{1}{|A|}\right). \nonumber \\
+&= \tmina \left( 1 + \frac{1}{2} + \ldots + \frac{1}{k} 
++ \ldots + \frac{1}{|A|-1} \right). \nonumber
 \end{align}
 \end{proof}
 
@@ -1133,15 +1139,16 @@ Putting it all together,
 Consider an unweighted binary tree as in \cref{fig:binary} with a single root $\rho$.
 A vertex has two children if it is distance less than $k$
 from the root and no children if it is a leaf (distance $k$ from the root).
-There are $n = 1 + 2 + 4 + ... + 2^k = 2^{k+1} - 1$ vertices.
+There are $n = 1 + 2 + 4 + \ldots + 2^k = 2^{k+1} - 1$ vertices.
 
 By \cref{eqn:commute}, the commute time between the root and a leaf $a$ is
 \begin{align}
-C R_{\rho, a} = 2 (n-1) k \nonumber
+C R_{\rho, a} = 2 (n-1) k \nonumber.
 \end{align}
-Note that the resistance adds in series so $\Rxy = i$ where $i$
+Note that effective resistance adds in series so $\Rxy = i$ where $i$
 is the length of the single path between $x$ and $y$.
 
+We first use the Matthews Upper Bound.
 The maximum hitting distance is between two vertices whose 
 mose recent common ancestor is the root.
 For this pair, the hitting time is the same as the commute time
@@ -1155,10 +1162,41 @@ Then
 
 and \cref{thm:matthews_up} gives
 \begin{align}
-\tcov \leq 2(n-1)k\left(1 + \frac{1}{2} + ... + \frac{1}{n} \right). \nonumber
+\tcov &\leq 2(n-1)k\left(1 + \frac{1}{2} + \ldots + \frac{1}{n} \right) \nonumber \\
+&\approx (2 - \frac{2}{n}) \cdot n k \log n \approx (2 - \frac{2}{n}) n k \log 2^{k+1} -1 \nonumber \\
+&\approx (2  + o(1)) \cdot n k^2 \log 2 \nonumber
 \end{align}
 
-\todo{add lower bound}
+We now use the Matthews Lower Bound.
+Choose a set $A \subseteq V(G)$ with a large hitting time between any
+pair of vertices.
+To find such a set, fix a level $h$ in our binary tree.
+Then let $A$ be a set of $2^h$ leaves so that each vertex at level $h$
+has a unique descendent in $A$.
+As $h$ increases, the distance between the leaves in $A$ decreases.
+Thus we want to choose a smaller value of $h$ so that our lower bound will be bigger
+(and better).
+
+For $a,b \in A$, the hitting time between $a$ and $b$ is the commute time
+from $a$ to their nearest common ancestor at level $h' < h$.
+By \cref{eqn:commute}, we have
+\begin{align}
+\E_a [T_b] = \E_a [T_h'] + \E_{h'} [T_a] = 2 (n-1) (k-h') \nonumber.
+\end{align}
+
+In the worst case, $h' = h-1$.
+Then by \cref{thm:matthews_low},
+\begin{align}
+\tcov &\geq 2 (n-1)(k-h+1)\left(1 + \frac{1}{2} + \ldots + \frac{1}{2^h -1} \right) \nonumber \\
+&\approx (2 + o(1)) \cdot n (k-h) h \log 2 \nonumber.
+\end{align}
+
+If $h=\lfloor k/2 \rfloor$,
+\begin{align}
+\tcov &\geq \frac{1}{4} ( 2 + o(1) )\cdot nk^2 \log 2\nonumber
+\end{align}
+then there is a factor of 4 gap between the upper bound and lower bound
+of the cover time of a binary tree!
 
 \subsection{Spanning Tree Argument}
 \cite{AF14}
@@ -1182,7 +1220,7 @@ another upper bound for the cover time of a random walk.
 	    \draw[edge] (1) -- (3);
 	    \draw[span] (2) -- (3);
 	\end{tikzpicture}
-	\caption{A spanning tree of the complete graph with $n=4$.}\label{fig:span}
+	\caption{A spanning tree (in bold) of the complete graph with $n=4$.}\label{fig:span}
 \end{figure}
 
 A spanning tree $\T$ is a subset of a graph with all edges
@@ -1212,7 +1250,7 @@ In particular for an unweighted graph,
 
 \begin{proof}
 Given a spanning tree $\T$, there exists a vertex $v$ with only one edge.
-Consider the path $v_0, v_1, ..., v_{2n-2}$ where $v=v_0=v_{2n-2}$
+Consider the path $v_0, v_1, \ldots, v_{2n-2}$ where $v=v_0=v_{2n-2}$
 that traverses each edge in the spanning once in each direction
 and covers every vertex.
 We construct this path by starting at $v$ and walking along all $n-1$ edges to the
@@ -1251,11 +1289,14 @@ Then
 \end{proof}
 
 
-\section{Distributional Aspects}
+\section{Cover Time Distribution}
+\subsection{Complete Graph}
 \cite{Du11}
 We consider the distribution of the cover time of a random walk
 on the complete graph with self edges.
 Call $r$ the number of steps since we began the random walk.
+So that the notation works out more easily,
+set $r=1$ when we begin our walk at $X_0$.
 Let $A_i$ be the event that vertex $i$ is not visited and
 $N_n$ the number of unvisited vertices.
 Then
@@ -1300,7 +1341,8 @@ where $k\neq m$ in the first term and $k=m$ in the second.
 As $n \rightarrow \infty$,
 \begin{align}
 \Var(N_n/n) &= \Var(N_n) / n^2 \nonumber\\
-&\rightarrow (1-2/n)^r - (1-1/n)^{2r} = e^{-2c} - (e^{-c})^2 = 0. \nonumber
+&= (1-2/n)^r - (1-1/n)^{2r} + o(n) \nonumber\\
+&\rightarrow e^{-2c} - (e^{-c})^2 = 0. \nonumber
 \end{align}
 
 By Chebyshev's Inequality,
@@ -1317,8 +1359,8 @@ a Poisson distribution with mean $c$.
 We can use this to intuite our conclusion: the proportion of visits to each vertex
 approaches $e^{-c}$.
 
-We prove the following theorem and then use it to gain insight into the cover time
-variable $\cov$.
+We prove the following theorem and then use it to gain insight into
+the distribution of the cover time variable $\cov$.
 \begin{theorem}\label{thm:pois}
 If $ne^{-r/n} \rightarrow \lambda \in [0, \infty)$, then the number of unvisited
 vertices approaches a Poisson distribution with mean $\lambda$.
@@ -1337,8 +1379,8 @@ of the probability that at least one vertex has not been visited.
 
 By the principle of inclusion-exclusion,
 \begin{align}
-p_0(r,n) &= {n \choose 0} 1^r - {n \choose 1} (1-1/n)^r + ... \nonumber\\
-&= \sum_{k=0}^n (-1)^k {n \choose k} (1-k/n)^r. \nonumber
+p_0(r,n) &= {n \choose 0} 1^r - {n \choose 1} (1-1/n)^r + \ldots \nonumber\\
+&= \sum_{k=0}^n (-1)^k {n \choose k} (1-k/n)^r. \label{eqn:p0}
 \end{align}
 
 If we consider the locations of the unvisited vertices,
@@ -1349,64 +1391,63 @@ p_m(r,n) = {n \choose m} \left(1-\frac{m}{n}\right)^r p_0(r, n-m). \nonumber
 Our strategy is to show that $p_m(r,n) \rightarrow \frac{\lambda^m}{m!}e^{-\lambda}$.
 The first step is to prove that
 \begin{align}
-{n \choose m} \left(1-\frac{m}{n}\right)^r \rightarrow \lambda ^m /m! \nonumber
+{n \choose m} \left(1-\frac{m}{n}\right)^r \rightarrow \lambda ^m /m! \label{eqn:lim}
 \end{align}
 
-We bound the expression from the top and the bottom and use the dominated convergence
-theorem to prove the previous limit.
+We bound the expression from the top and the bottom and use the squeeze
+theorem to prove the most recent limit.
 We will first show the upper bound.
 Notice that $(1-x) \leq e^{-x}$ and recall our assumption that
 $ne^{r/n} \rightarrow \lambda$.
 Then
 \begin{align}
-{n \choose m} \left(1-\frac{m}{n}\right)^r &\leq \frac{n^m}{m!} e^{mr/n} \nonumber \\
-&= \frac{(n e^{r/n})^m} {m!} \nonumber \\
-&\rightarrow \frac{\lambda ^m} {m!} \nonumber
+{n \choose m} \left(1-\frac{m}{n}\right)^r &\leq \frac{n^m}{m!} e^{mr/n} 
+= \frac{(n e^{r/n})^m} {m!} \nonumber \\
+&\rightarrow \frac{\lambda ^m} {m!}. \nonumber
 \end{align}
 
 We now turn to the more tricky lower bound.
 Notice that ${n \choose m} \geq (n-m)^m / m!$
-\todo{why?}
 Then
 \begin{align}
-{n \choose m} \left(1-\frac{m}{n}\right)^r &\geq \left(1-\frac{m}{n}\right)^r (n-m)^m / m! \nonumber\\
-&\geq n^m (1 - \frac{m}{n})^r (1- \frac{m}{n})^m  / m! \nonumber
+{n \choose m} \left(1-\frac{m}{n}\right)^r
+&\geq \left(1-\frac{m}{n}\right)^r \frac{(n-m)^m}{m!}
+\left( \frac{n^m}{n^m} \right) \nonumber\\
+&\geq n^m (1 - \frac{m}{n})^r (1- \frac{m}{n})^m  \frac{1}{m!}. \nonumber
 \end{align}
 
 As $n \rightarrow \infty$, $\left(1-\frac{m}{n}\right)^m \rightarrow 1$
 and $1/m!$ is constant.
 We use the Taylor series of $\log(1-t)$ for $0 \leq t \leq 1/2$
-to bound the rest of the term.
+to bound the rest.
 Notice that
 \begin{align}
-\log(1-t) &= 0 - t - t^2/2 -t^3/3 - ... \nonumber\\
-&\geq -t -t^2/2(1 + 1/2 + 1/4 + ...) = -t - t^2 \nonumber
+\log(1-t) &= 0 - t - t^2/2 -t^3/3 - \ldots \nonumber\\
+&\geq -t -t^2/2(1 + 1/2 + 1/4 + \ldots) = -t - t^2 \nonumber
 \end{align}
 and so we have
 \begin{align}
 \log \left(n^m\left(1-\frac{m}{n}\right)^r \right)
 &= m \log n + r \log\left(1-\frac{m}{n}\right) \nonumber \\
-& \geq m \log n - r m /n - r m/n^2. \nonumber
+& \geq m \log n - r\frac{m}{n} - r\frac{m}{n^2}. \nonumber
 \end{align}
 
-\todo{why?}
-Our assumption that $ne^{r/n} \rightarrow \lambda$ implies that
+We use our assumption that $ne^{r/n} \rightarrow \lambda$
+to solve for $r$
 \begin{align}
-r = n \log n - n \log \lambda + o(n) \nonumber
+e^{\log n + -r/n} &\rightarrow e^{\log \lambda} \nonumber\\
+\log n + -r/n &= \log \lambda + o(n) \nonumber \\
+r &= n \log n - n \log \lambda + o(n). \nonumber
 \end{align}
-so $r(m/n)^2 \rightarrow 0$.
-Then
+Since $r (m/n)^2 \rightarrow 0$ and
 \begin{align}
-rm/n &=m \log n - m \log \lambda + o(n)m/n \nonumber
+\frac{rm}{n} &=m \log n - m \log \lambda + o(n)\frac{m}{n} \nonumber \\
+ m \log n - \frac{rm}{n}&\rightarrow m \log \lambda \nonumber
 \end{align}
-and in particular
-\begin{align}
-m \log \lambda &\rightarrow m \log n - rm/n \nonumber
-\end{align}
-so
+we have
 \begin{align}
 \log \left(n^m\left(1-\frac{m}{n}\right)^r \right)
-&\geq m \log n - rm/n. \nonumber
+&\geq m \log n - \frac{rm}{n} - \frac{rm}{n^2} \rightarrow \log \lambda^m. \nonumber
 \end{align}
 It follows that
 \begin{align}
@@ -1414,33 +1455,26 @@ It follows that
 &\geq \lambda^m. \nonumber
 \end{align}
 
-Now we put together the pieces.
-To begin,
-\begin{align}
-{ n \choose m } (1-\frac{m}{n})^r \rightarrow \lambda^m /m! \nonumber
-\end{align}
-so
+Now we put the pieces back together.
+The most recent limit implies \cref{eqn:lim}.
+By \cref{eqn:lim} and \cref{eqn:p0},
 \begin{align}
 p_0(r,n) \rightarrow \sum_{k=0}^\infty \lambda^k /k! = e^{-\lambda}. \nonumber
 \end{align}
 
-The result holds for
-\begin{align}
-p_0(r,n-m) \rightarrow e^{-\lambda} \nonumber
-\end{align}
+Notice $p_0(r,n-m)$ also goes to $e^{-\lambda}$
 since $m$ is fixed and $(n-m)e^{r/(n-m)} \rightarrow \lambda$.
-
-Finally,
+Finally, the most recent limit and the equation of $p_m(r,n)$ imply
 \begin{align}
-p_m(r,n) &= {n \choose m} (1-\frac{m}{n})^r p_0(r, n-m) \nonumber \\
-&\rightarrow \frac{\lambda^m}{ m!} e^{-\lambda} \nonumber
+p_m(r,n) 
+&\rightarrow \frac{\lambda^m}{ m!} e^{-\lambda} \nonumber.
 \end{align}
-so we have that $N_n \rightarrow \textrm{Pois}(\lambda)$ as claimed.
+$N_n$ approaches a Poisson distribution with mean $\lambda$ as claimed.
 
 \end{proof}
 
 
-
+We use \cref{thm:pois} to find the distribution of the cover time variable $\cov$.
 Set $r = n \log n + nx$.
 Then 
 \begin{align}
@@ -1448,21 +1482,18 @@ ne^{-r/n} &= n e ^{- \log n - x} \nonumber \\
 &= n e {- \log n} e^ {- x} = e^{-x}.\nonumber
 \end{align}
 
-Consider the cover time variable $\cov$.
-Since $\cov \leq m$ if and only if the first $m$ steps
-of the random walk visit all $n$ vertices, then by \cref{thm:pois},
+Using the fact that $\cov \leq m$ if and only if the first $m$ steps
+of the random walk visit all $n$ vertices
+and $ne^{-r/n} \rightarrow e^{-x}$ as the assumption of \cref{thm:pois},
 \begin{align}
-\pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber
-\end{align}
-and
-\begin{align}
+\pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber \\
 \pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}}. \nonumber
 \end{align}
 
+\subsection{Computation}
+\todo{example of probability of birthday cover time in x=2190 vs x=1825 steps}
 
-
-
-\section{Simulation}
+\todo{simulate cover time a thousand times on complete graph with n = 365}
 
 \cite{Bo98}
 \cite{Gr10}
