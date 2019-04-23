@@ -1317,7 +1317,8 @@ a Poisson distribution with mean $c$.
 We can use this to intuite our conclusion: the proportion of visits to each vertex
 approaches $e^{-c}$.
 
-We prove the following theorem and then use it to show that $\cov \sim \textrm{Pois}(e^{-x})$.
+We prove the following theorem and then use it to gain insight into the cover time
+variable $\cov$.
 \begin{theorem}\label{thm:pois}
 If $ne^{-r/n} \rightarrow \lambda \in [0, \infty)$, then the number of unvisited
 vertices approaches a Poisson distribution with mean $\lambda$.
@@ -1352,7 +1353,7 @@ The first step is to prove that
 \end{align}
 
 We bound the expression from the top and the bottom and use the dominated convergence
-theorem.
+theorem to prove the previous limit.
 We will first show the upper bound.
 Notice that $(1-x) \leq e^{-x}$ and recall our assumption that
 $ne^{r/n} \rightarrow \lambda$.
