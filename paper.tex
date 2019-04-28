@@ -19,6 +19,8 @@
 \usepackage{upgreek}
 %\usepackage{cite}
 \usepackage{cite}
+\usepackage{listings}
+\usepackage[toc, page]{appendix}
 
 
 
@@ -204,7 +206,7 @@ Formally,
 \subsection{Electrical Networks \label{sec:electric}}
 
 There are many connections between electrical networks
-and random walks \cite{DS84}.
+and random walks \cite{Bo98}.
 Physical properties like voltage, current, and resistance
 all have probabilistic interpretations.
 In this section, we explore electrical networks to build intuition about 
@@ -263,10 +265,29 @@ we justify the probabilistic interpretation of voltage
 v_x \sum_y C_{x,y} &= \sum_y C_{x,y} v_y \nonumber \\
 v_x &= \sum_y \frac{C_{x,y}}{C_x} v_y = \sum_y \pr_{x,y} v_y. \nonumber
 \end{align}
-We can probabilistically verify that $v_x = \sum_y \pr_{x,y} v_y$
+We can verify that $v_x = \sum_y \pr_{x,y} v_y$
 using first step analysis on the probability of reaching $a$ before $b$.
 
 \subsection{Outline}
+
+Rely on \cite{BH94}
+Always possible to find cover time but it gets hard as the graph gets bigger
+Structure helps:
+Complete graph,
+Line graph,
+Simple cycle (extended line graph)
+
+In lieu of structure, we want to work with arbitrary graphs
+Rely on \cite{DS84} for commute time relationship
+Rely on \cite{LP17}
+Matthews method is intuitive approach that uses same ideas as complete graph
+Matthews method applied to binary tree with commute time relationship
+Use \cite{AF14}
+Explore the idea of a spanning tree and use it to bound time with commute identity
+
+So far we've only worked with expected time
+\cite{Du11}
+Explore what happens for the variable and it's distribution
 
 \todo{outline of each section and subsections}
 
@@ -501,14 +522,14 @@ If we let the label of each graph in \cref{fig:example}
 denote the cover time from that case, we have the following system
 of equations:
 \begin{align}
-\tcov &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{b} \nonumber \\
-\textrm{a} &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{c} \nonumber \\
-\textrm{b} &= 1 + \frac{1}{2}\textrm{b} + \frac{1}{2}\textrm{e} \nonumber \\
-\textrm{c} &= 1 + 1\textrm{e} \nonumber\\
-\textrm{d} &= 1 + \frac{1}{3}\textrm{a} + \frac{1}{3}\textrm{e} + \frac{1}{3}\textrm{f} \nonumber \\
-\textrm{e} &= 1 + \frac{1}{3}\textrm{c} + \frac{1}{3}\textrm{e} + \frac{1}{3}\dot 0\nonumber \\
-\textrm{f} &= 1 + \frac{1}{2}\textrm{g} + \frac{1}{2}\dot 0\nonumber \\
-\textrm{g} &= 1 + \frac{2}{3}\textrm{f} + \frac{1}{3}\dot 0\nonumber
+&\tcov = 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{b}
+&\textrm{a} = 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{c} \nonumber \\
+&\textrm{b} = 1 + \frac{1}{2}\textrm{b} + \frac{1}{2}\textrm{e}
+&\textrm{c} = 1 + 1\textrm{e} \nonumber \\
+&\textrm{d} = 1 + \frac{1}{3}\textrm{a} + \frac{1}{3}\textrm{e} + \frac{1}{3}\textrm{f}
+&\textrm{e} = 1 + \frac{1}{3}\textrm{c} + \frac{1}{3}\textrm{e} + \frac{1}{3}\dot 0\nonumber \\
+&\textrm{f} = 1 + \frac{1}{2}\textrm{g} + \frac{1}{2}\dot 0
+&\textrm{g} = 1 + \frac{2}{3}\textrm{f} + \frac{1}{3}\dot 0\nonumber \\
 \end{align}
 
 With a little linear algebra, we find that $\tcov = 43/6$.
@@ -857,7 +878,7 @@ By linearity of expectation,
 \section{Bounds}
 
 \subsection{Commute Time Identity} \label{sec:commute}
-We use the electrical network analysis in \cref{sec:electric} to 
+\cite{DS84} We use the electrical network analysis in \cref{sec:electric} to 
 prove the commute time identity so we may use it to help us bound
 cover times.
 
@@ -1289,7 +1310,7 @@ Then
 \end{proof}
 
 
-\section{Cover Time Distribution}
+\section{Cover Time Distributions}
 \subsection{Complete Graph}
 \cite{Du11}
 We consider the distribution of the cover time of a random walk
@@ -1487,16 +1508,48 @@ of the random walk visit all $n$ vertices
 and $ne^{-r/n} \rightarrow e^{-x}$ as the assumption of \cref{thm:pois},
 \begin{align}
 \pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber \\
-\pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}}. \nonumber
+\pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}}. \label{eqn:dist}
 \end{align}
 
-\subsection{Computation}
-\todo{example of probability of birthday cover time in x=2190 vs x=1825 steps}
+\subsection{The Birthday Problem}
+Consider a complete graph (with self-edges) and 365 vertices.
+We may think of the cover time variable of this graph as the number of people
+until every birthday is represented.
+We call this the birthday problem.
 
-\todo{simulate cover time a thousand times on complete graph with n = 365}
+We use \cref{eqn:dist} to calculate the probability
+that all birthdays are represented in populations of 
+size $r=2190$ and $r=1825$, respectively.
+The number of vertices $n$ is 365 so $n\log n = 2153$.
+It follows that
+\begin{align}
+\pr(\cov \leq 2190) &= \pr \left(\frac{\cov - 2153}{365} \leq
+\frac{37}{365}\right) \nonumber \\
+&\approx e^{-e^{-.10137}} \approx 0.40511 \nonumber
+\end{align}
+but 
+\begin{align}
+\pr(\cov \leq 1825) &= \pr \left(\frac{\cov - 2153}{365} \leq
+\frac{328}{365}\right) \nonumber \\
+&\approx e^{-e^{-.8.9863}} \approx 0.08576. \nonumber
+\end{align}
 
-\cite{Bo98}
-\cite{Gr10}
+There appears to be a critical stage where it quickly becomes very likely
+that all birthdays have been represented.
+\cref{fig:birthday} shows the cumulative distribution of the birthday problem.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=.5]
+\node (graph) at (0,0) {\includegraphics[scale=.25, height=10cm]{birthdays}};
+\node (title) at (1, 10) {Cover Times of the Birthday Problem (1000 trials)};
+\node[rotate=90] (ylabel) at (-13,2) {$\pr(\cov \leq r)$};
+\node (xlabel) at (0,-9) {$r$};
+\end{tikzpicture}
+\caption{The cumulative distribution of the birthday problem. The red line denotes the empirical distribution from 1000 trials. The blue line denotes the distribution from \cref{eqn:dist}.}\label{fig:birthday}
+\end{figure}
+
+%\cite{Gr10}
 
 \newpage
 \bibliography{mybib}{}
@@ -1543,6 +1596,12 @@ and $ne^{-r/n} \rightarrow e^{-x}$ as the assumption of \cref{thm:pois},
 
 \end{thebibliography}
 \end{comment}
+
+\newpage
+\begin{appendices}
+\subsection{Birthday Problem}
+\lstinputlisting{computation.R}
+\end{appendices}
 
 \end{document}
 
