@@ -135,7 +135,17 @@
 \maketitle
 %-Title
 
-\abstract{\todo{abstract}}
+\abstract{
+The cover time of a graph is the time it takes for a random walk to
+visit all of its vertices.
+We provide a detailed overview for a variety of cover time topics:
+We begin by investigating the cover time of small and structured graphs but
+quickly need a more robust strategy for larger, unstructured ones.
+We apply more general probablistic arguments and an important electrical
+network relationship to identify bounds.
+Finally, we describe the limiting distribution of the cover time of
+complete graphs with self-edges and apply our analysis to an intuitive example.
+}
 
 \newpage
 \tableofcontents
@@ -143,31 +153,37 @@
 \newpage
 \section{Introduction and Background}
 
-\todo{write general introduction to cover times}
-"white screen" problem
-numerous applications
-many mathematical tools
+We begin by describing two intuitive examples of cover time problems.
+Consider a coupon collector who opens a single box of cereal everyday.
+In each box, is one of $n$ distinct coupons.
+How many days until our collector has collected at least one of every coupon?
+(The coupon collector's problem corresponds to the cover time of the complete
+graph with self-edges.)
 
-\subsection{Motivation}
-\todo{write about applications}
-universal travel sequences
-graph connectivity
-protocol testing
-birthday problem
-coupon collectors
+Next consider a similar scenario called the birthday problem.
+How many people would we need to ensure that every day of the year
+(excluding February 29) is represented as a birthday?
+A lower bound is certainly 365 but it turns out that there is no upper bound.
+
+Other applications of cover times include universal travel sequences,
+graph connectivity algorithms, and protocol testing.
+
+In this paper, we use a variety of strategies like first step analysis
+and draw on several related topics such as electrical networks to rigorously
+investigate cover times.
 
 \subsection{Definitions}
-We consider an undirected, connected graph $G$ without self loops or multi-edges.
+We consider an undirected, connected graph $G$ without self- or multi-edges.
 Let $V(G)$ be the set of vertices and let $E(G)$ be the set of edges on $G$.
 Then $n$ is the number of vertices $|V(G)|$.
-We say $i\sim j$ for $i$ and $j$ in the vertex set $V(G)$ if $(i,j)$ in $E(G)$.
+We say $i\sim j$ for $i$ and $j$ in the vertex set $V(G)$ if $(i,j)$ is in $E(G)$.
 Assume that each vertex is accessible from every other vertex.
-That is, there is a set of edges from any $x$ to any $y$.
+That is, there is a set of edges connecting any $x$ to any $y$.
 %Without loss of generality, we label the vertices $\{1, 2, 3, ..., n\}$.
 
-Let $C_{i,j}$ be the non-negative weight of the edge between vertices $i$ and $j$.
+Let $C_{i,j}=C_{j,i}$ be the non-negative weight of the edge between vertices $i$ and $j$.
 We will mostly consider unweighted graphs
-with $C_{i,j} = 1$ if $i \sim j$ and $C_{i,j} = 0$ otherwise.
+such that $C_{i,j} = 1$ if $i \sim j$ and $C_{i,j} = 0$ otherwise.
 
 Define the weight of vertex $i$ 
 \begin{align}
@@ -177,9 +193,9 @@ In the unweighted case, $C_i$ is the degree of vertex $i$.
 
 We consider a random walk $(X_t)$ on $G$.
 Call $X_t$ the vertex that the walk is on at time $t$.
-The random walker begins at vertex $X_0$.
-At each step, the walker at vertex $i$ moves to neighboring vertex
-$j$ with probability $c(i,j)/c(i)$.
+The random walk begins at vertex $X_0$.
+At each step, the walk at vertex $i$ moves to neighboring vertex
+$j$ with probability $C(i,j)/C(i)$.
 
 Let $T_{j}$ be the number of steps until the first visit to $j$.
 Formally,
@@ -249,9 +265,8 @@ Consider $a$ and $b$ in $V(G)$.
 Set the voltage to be 1 at $a$ and 0 at $b$.
 We may think of voltage as the probability we get to $a$ before $b$.
 Probabilistically, of course $v_a = 1$ and $v_b=0$.
-Voltage is a harmonic function so the voltage at every vertex $x$ in 
-$V(G) \textbackslash \{a,b\}$ is determined by the boundary values
-(at $a$ and $b$).
+The voltage at every vertex $x$ in  $V(G) \textbackslash \{a,b\}$
+is determined by the boundary values (at $a$ and $b$).
 
 The current between two vertices is the product of the
 difference in their voltages and the conductance of their edge.
@@ -270,31 +285,37 @@ using first step analysis on the probability of reaching $a$ before $b$.
 
 \subsection{Outline}
 
-Rely on \cite{BH94}
-Always possible to find cover time but it gets hard as the graph gets bigger
-Structure helps:
-Complete graph,
-Line graph,
-Simple cycle (extended line graph)
+We begin in \cref{sec:small_example}.
+(\cref{sec:structured_graphs} primarily relies on \cite{BH94}.)
+We see that it is always possible to exactly calculate the cover time
+of graph but it is in general very difficult to do so.
+For the remainder of this section, we investigate
+structured graphs that are exceptions to the rule:
+the complete graph, line graphs, and simple cycles.
 
-In lieu of structure, we want to work with arbitrary graphs
-Rely on \cite{DS84} for commute time relationship
-Rely on \cite{LP17}
-Matthews method is intuitive approach that uses same ideas as complete graph
-Matthews method applied to binary tree with commute time relationship
-Use \cite{AF14}
-Explore the idea of a spanning tree and use it to bound time with commute identity
+\cref{sec:bounds} deals with the large or unstructured graphs 
+for which we must use bounds.
+We begin by establishing an important identity between
+commute times and effective resistance in \cref{sec:commute}.
+(Our electrical network analysis is an extension of \cite{DS84}
+and we use \cite{LP17} for the next two subsections.)
+We take our strategy for finding the cover time of the complete graph
+from \cref{sec:complete} and apply it to general graphs in \cref{sec:matthews}.
+In \cref{sec:binary}, we use both the commute time identity and the Matthews Method
+to bound the cover time of a binary tree.
+In \cref{sec:spanning}, we follow \cite{AF14} and use the idea of a spanning tree
+as well as the commute time identity to develop another bound for general graphs.
 
-So far we've only worked with expected time
-\cite{Du11}
-Explore what happens for the variable and it's distribution
+Up until \cref{sec:dist}, we have only considered the expected cover time.
+We now delve into the distribution of the cover time of a complete graph.
+We draw on \cite{Du11} and find that the cover time variable approaches a Poisson
+distribution.
+In \cref{sec:birthday}, we apply \cref{sec:complete_dist} to the birthday problem.
+(The R code for our computations and \cref{fig:birthday} can be found in \cref{app:birthday}.)
 
-\todo{outline of each section and subsections}
+\section{Cover Times of Structured Graphs}\label{sec:structured_graphs}
 
-
-\section{Cover Times of Structured Graphs}
-
-\subsection{Small Example}
+\subsection{Small Example}\label{sec:small_example}
 In general, it is always possible to find the exact cover time
 of a graph using first step analysis.
 We demonstrate the strategy on a small graph suggested by \cite{BH94}.
@@ -540,7 +561,7 @@ The rest of this section deals with particularly symmetric graphs
 for which it is possible to find a solution for an arbitrary $n$.
 However, we must rely on cover time bounds for the vast majority of cases.
 
-\subsection{Complete Graph \label{sec:complete}}
+\subsection{Complete Graph}\label{sec:complete}
 We call the graph with an edge between each pair of vertices the
 complete graph.
 Note that a complete graph with $n$ vertices has ${n \choose 2}$ edges.
@@ -607,8 +628,8 @@ We want to know how many days until the fan has collected each coupon.
 The strategy is to think of every coupon as a vertex on the complete graph.
 We then move from vertex to vertex with uniform probability.
 The difference between the coupon collecting problem and the complete graph
-is that we now have self-edges.
-Before, we had to leave our current vertex at each step.
+is that we have self-edges
+whereas before we had to leave our current vertex at each step.
 Now, we can stay in the same vertex (provided our collector found the same coupon
 two days in a row).
 We apply our approach to the complete graph and substitute the $r$ possible coupons
@@ -661,7 +682,7 @@ We apply our approach to the complete graph and conclude that
 \tcov&= 2(n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+\ldots+1\right). \nonumber
 \end{align}
 
-\subsection{Line Graph}
+\subsection{Line Graph}\label{sec:line_graph}
 A line graph is a set of vertices connected in a line.
 (\cref{fig:line} is an example with $n=N+1$.)
 
@@ -821,7 +842,7 @@ Then, by \cref{thm:line}, for the random walk from state $i$ on the line graph,
 \tcov = i(N-i) + N^2. \nonumber
 \end{align}
 
-\subsection{Simple Cycle}
+\subsection{Simple Cycle}\label{sec:simple_cycle}
 
 A simple cycle is a connected graph where
 each vertex has an edge to exactly two other vertices.
@@ -875,7 +896,7 @@ By linearity of expectation,
 &= 1 + 2 + \dots + k-1 + \dots + n-1  = \frac{1}{2}n(n-1). \nonumber
 \end{align}
 
-\section{Bounds}
+\section{Bounds}\label{sec:bounds}
 
 \subsection{Commute Time Identity} \label{sec:commute}
 \cite{DS84} We use the electrical network analysis in \cref{sec:electric} to 
@@ -933,7 +954,7 @@ E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a}\frac{1}{\pr_a(T_b < T_a)} = \Reff C.
 \label{eqn:commute}
 \end{align}
 
-\subsection{Matthews Method}
+\subsection{Matthews Method}\label{sec:matthews}
 We have seen that it is in general very hard
 to calculate the cover time of a random walk
 on a graph.
@@ -1116,7 +1137,7 @@ Putting it all together,
 \end{align}
 \end{proof}
 
-\subsection{Matthews Method on Binary Trees}
+\subsection{Matthews Method on Binary Trees}\label{sec:binary}
 
 \begin{figure}[ht]
 	\centering
@@ -1219,7 +1240,7 @@ If $h=\lfloor k/2 \rfloor$,
 then there is a factor of 4 gap between the upper bound and lower bound
 of the cover time of a binary tree!
 
-\subsection{Spanning Tree Argument}
+\subsection{Spanning Tree Argument}\label{sec:spanning}
 \cite{AF14}
 We introduce the concept of a spanning tree to create
 another upper bound for the cover time of a random walk.
@@ -1310,8 +1331,8 @@ Then
 \end{proof}
 
 
-\section{Cover Time Distributions}
-\subsection{Complete Graph}
+\section{Cover Time Distributions}\label{sec:dist}
+\subsection{Complete Graph}\label{sec:complete_dist}
 \cite{Du11}
 We consider the distribution of the cover time of a random walk
 on the complete graph with self edges.
@@ -1511,7 +1532,7 @@ and $ne^{-r/n} \rightarrow e^{-x}$ as the assumption of \cref{thm:pois},
 \pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}}. \label{eqn:dist}
 \end{align}
 
-\subsection{The Birthday Problem}
+\subsection{The Birthday Problem}\label{sec:birthday}
 Consider a complete graph (with self-edges) and 365 vertices.
 We may think of the cover time variable of this graph as the number of people
 until every birthday is represented.
@@ -1534,9 +1555,9 @@ but
 &\approx e^{-e^{-.8.9863}} \approx 0.08576. \nonumber
 \end{align}
 
-There appears to be a critical stage where it quickly becomes very likely
+There appears to be a critical threshold where it quickly becomes very likely
 that all birthdays have been represented.
-\cref{fig:birthday} shows the cumulative distribution of the birthday problem.
+\cref{fig:birthday} verifies our intuition.
 
 \begin{figure}[ht]
 \centering
@@ -1599,7 +1620,7 @@ that all birthdays have been represented.
 
 \newpage
 \begin{appendices}
-\subsection{Birthday Problem}
+\subsection{Birthday Problem}\label{app:birthday}
 \lstinputlisting{computation.R}
 \end{appendices}
 
