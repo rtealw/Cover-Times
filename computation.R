@@ -33,7 +33,7 @@ cdf(2190) # Probability all birthdays represented with 2190 people
 cdf(1825) # Probability all birthdays represented with 1825 people
 
 cover_times3 %>% # Graph of birthday cover times
-  ggplot() + theme_classic()+
+  ggplot() + theme_classic() +
   stat_function(fun = cdf, color="blue", alpha=.5, size=2) +
   geom_line(aes(x=cover_times3$cover_times, y=cover_times3$percentile),
             color="red", alpha=.5, size=2) +

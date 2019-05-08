@@ -9,9 +9,11 @@
 
 \DeclareMathOperator{\E}{\textrm{E}}		     % expected value
 \DeclareMathOperator{\pr}{\mathrm{P}}		     % probability 
+\DeclareMathOperator{\cov}{t_{cov}}	             % cover time
 
 \title{Cover Times of Random Walks}
 \author{R. Teal Witter}
+\institute{Middlebury College}
 \date{May 9, 2019}
 
 \begin{document}
@@ -166,7 +168,7 @@ to be represented?
 			    \draw[edge] (0,1) -- (1,0);
 			    \draw[edge] (0,1) -- (1,1);
 			    \draw[edge] (1,1) -- (1,0);
-%			    \node (l) at (.5, 1.1) {$t_{cov}$};
+%			    \node (l) at (.5, 1.1) {$\cov$};
 			    \node (bl) at (0,0) {};
 			    \node[current] (tl) at (0,1) {};
 			    \node (br) at (1,0) {};
@@ -337,7 +339,7 @@ to be represented?
 \begin{frame}{A Small Graph}
 \small
 \begin{align}
-\E[t_{cov}] &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{b} 
+\E[\cov] &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{b} 
 \only<2->{= \frac{43}{6}}\nonumber \\
 \textrm{a} &= 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{c} \nonumber \\
 \textrm{b} &= 1 + \frac{1}{2}\textrm{b} + \frac{1}{2}\textrm{e} \nonumber \\
@@ -355,7 +357,7 @@ to be represented?
 Let $X_i$ be the number of steps from $i-1$ to $i$ distinct vertices.
 \only<2-> {
 \begin{align}
-\E[t_{cov}] &= \E[X_1+X_2+X_3+\cdots+X_{n}] \nonumber
+\E[\cov] &= \E[X_1+X_2+X_3+\cdots+X_{n}] \nonumber
 \end{align}
 }
 
@@ -363,7 +365,7 @@ Let $X_i$ be the number of steps from $i-1$ to $i$ distinct vertices.
 \only<4-> {so $\E[X_i] = \frac{n}{n-i+1}$}
 \only<5-> {and
 \begin{align}
-\E[t_{cov}] &= n\left(\frac{1}{n}+\frac{1}{n-1}+\cdots+1\right) \nonumber
+\E[\cov] &= n\left(\frac{1}{n}+\frac{1}{n-1}+\cdots+1\right) \nonumber
 \end{align}
 }
 \end{frame}
@@ -393,7 +395,7 @@ On average, we need about 2365 people.
 Consider a random walk on an arbitrary connected graph with $n$ vertices. Then
 \end{theorem}
 \begin{align}
-\E[t_{cov}] &\leq t_{hit} \left(1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{n-1} \right). \nonumber
+\E[\cov] &\leq t_{hit} \left(1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{n-1} \right). \nonumber
 \end{align}
 \end{frame}
 
@@ -405,8 +407,8 @@ Let $T_k$ be the first time vertices
 $\sigma_1, \sigma_2, \ldots, \sigma_k$ have all been visited.
 \pause
 \begin{align}
-\E[t_{cov}] &\leq \E_n[{T_{n-1}}]  \nonumber \\
-&= \E_n[T_1 + (T_2 - T_1) + \cdots + (T_{n-1} - T_{n-2})] . \nonumber
+\E[\cov] &\leq \E_n[{T_{n-1}}]  \nonumber \\
+&\leq \E_n[T_1 + (T_2 - T_1) + \cdots + (T_{n-1} - T_{n-2})] . \nonumber
 \end{align}
 
 
@@ -432,7 +434,7 @@ all visited.
 \section{Cover Time Distribution of the a Complete Graph with Self-edges}
 
 \begin{frame}{Poisson Distribution}
-After $r$ steps of a random walk, let $A_i$ be the probability that
+After $r$ steps of a random walk, let $A_i$ be the event that
 vertex $i$ is unvisited.
 \begin{align}
 \pr(A_i) = (1-1/n)^r \nonumber
@@ -440,8 +442,8 @@ vertex $i$ is unvisited.
 \pause
 Let $N_n$ be the number of unvisited vertices.
 \begin{align}
-\E[N_n] &= n(1-1/n)^r. \nonumber  \\
-&=n[(1-1/n)^n]^{r/n} = n e^{r/n} \nonumber
+\E[N_n] &= n(1-1/n)^r \nonumber  \\
+&=n[(1-1/n)^n]^{r/n} = n e^{-r/n} \nonumber
 \end{align}
 \pause
 I promise that 
@@ -462,8 +464,8 @@ vertices approaches a Poisson distribution with mean $\lambda$.
 \end{theorem}
 \pause
 \begin{align}
-\pr(N_n=0) = \pr(t_{cov} \leq r) &\rightarrow e^{-e^{-x}} \nonumber \\
-\pr(t_{cov} - n \log n\leq nx) &\rightarrow e^{-e^{-x}} \nonumber
+\pr(N_n=0) = \pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber \\
+\pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}} \nonumber
 \end{align}
 \end{frame}
 
@@ -472,11 +474,11 @@ What is the probability all birthdays are covered in a town of 1825?
 How about a town of 2190?
 \pause
 \begin{align}
-\pr(t_{cov} \leq 1825) &= \pr \left(\frac{t_{cov} - 2153}{365} \leq
-\frac{328}{365}\right) \nonumber \\
-&\approx e^{-e^{-0.89863}} \approx 0.08576. \nonumber
+\pr(\cov \leq 1825) &= \pr \left(\frac{\cov - 2153}{365} \leq
+\frac{-328}{365}\right) \nonumber \\
+&\approx e^{-e^{-0.89863}} \approx 0.08576 \nonumber
 \only<3->{
-\\\pr(t_{cov} \leq 2190) &= \pr \left(\frac{t_{cov} - 2153}{365} \leq
+\\\pr(\cov \leq 2190) &= \pr \left(\frac{\cov - 2153}{365} \leq
 \frac{37}{365}\right) \nonumber \\
 &\approx e^{-e^{-0.10137}} \approx 0.40511 \nonumber
 }
@@ -488,7 +490,7 @@ How about a town of 2190?
 \begin{tikzpicture}[scale=.37]
 \node (graph) at (0,0) {\includegraphics[scale=.1, height=7cm]{birthdays}};
 \node (title) at (1, 10) {Cover Times of the Birthday Problem (1000 trials)};
-\node[rotate=90] (ylabel) at (-13,2) {$\pr(t_{cov} \leq r)$};
+\node[rotate=90] (ylabel) at (-13,2) {$\pr(\cov \leq r)$};
 \node (xlabel) at (0,-9) {$r$};
 \end{tikzpicture}
 \end{frame}
