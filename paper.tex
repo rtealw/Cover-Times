@@ -165,9 +165,11 @@ collector has collected at least one of every coupon?
 of the complete graph with self-edges.)
 
 Next consider a particular case of coupon collecting called the birthday problem.
-How many people would we need to ensure that every day of the year
-(excluding February 29) is represented as a birthday?
-A lower bound is certainly 365 but there is no upper bound.
+Assuming all 365 days of the year, excluding February 29, are equally likely,
+how many people would we need to ensure each birthday is represented
+by at least one person?
+A lower bound is certainly 365 but it is possible to get an arbitrarily
+large population without covering each birthday.
 
 Other applications of cover times include universal travel sequences,
 graph connectivity algorithms, and protocol testing.
@@ -180,19 +182,22 @@ investigate cover times.
 We consider an undirected, connected graph $G$ without multi-edges.
 Let $V(G)$ be the set of vertices and let $E(G)$ be the set of edges on $G$.
 Then $n$ is the number of vertices $|V(G)|$.
-We say $i\sim j$ for $i$ and $j$ in the vertex set $V(G)$ if $(i,j)$ is in $E(G)$.
+We say $i\sim j$ for $i$ and $j$ in the vertex set $V(G)$ if $(i,j)$ 
+is in $E(G)$.
 Assume that each vertex is accessible from every other vertex.
-That is, there is a set of edges connecting any $x$ to any $y$.
+That is, for $x$ and $y$ there exists a path
+$x=v_0 \sim v_1 \sim \cdots \sim v_n = y$.
 
-Let $C_{i,j}=C_{j,i}$ be the non-negative weight of the edge between vertices $i$ and $j$.
-We will mostly consider unweighted graphs
-such that $C_{i,j} = 1$ if $i \sim j$ and $C_{i,j} = 0$ otherwise.
+Let $C_{i,j}=C_{j,i}$ be a non-negative weight assinged to the edge
+between vertices $i$ and $j$.
+We will mostly consider unweighted graphs,
+meaning $C_{i,j} = 1$ if $i \sim j$ and $C_{i,j} = 0$ otherwise.
 
 Define the weight of vertex $i$ 
 \begin{align}
 C_i &= \sum_{j:i \sim j} C_{i,j}. \nonumber
 \end{align}
-In the unweighted case, $C_i$ is the degree of vertex $i$.
+In the unweighted case, $C_i$ is simply the degree of vertex $i$.
 
 We consider a random walk $(X_t)$ on $G$.
 Call $X_t$ the vertex that the walk is on at time $t$.
@@ -200,13 +205,19 @@ The random walk begins at vertex $X_0$.
 At each step, the walk at vertex $i$ moves to neighboring vertex
 $j$ with probability $C(i,j)/C(i)$.
 
-Let $T_{j}$ be the number of steps until the first visit to $j$.
+Let $T_{j}$ be the number of steps until the first visit to $j$
+after time time $t=0$.
 Formally,
 \begin{align}
 T_{j} &= \textrm{min} \left\{t > 0 : X_t = j \right\}. \nonumber
 \end{align}
-Let the hitting time $\hit$ be the maximum expected time between two vertices on $G$.
-Note that $\E_i[T_j] = \E[T_j | X_0 = i]$.
+Let $\E_i[T_j] = \E[T_j | X_0 = i]$.
+This is the expected time of the first visit to $j$ given
+that the random walk started in vertex $i$.
+Then $\E_j[T_j]$ is the return time to $j$.
+Now define the hitting time $\hit$ for the graph
+be the maximum expected time between two vertices on $G$.
+
 Formally, 
 \begin{align}
 \hit &= \max_{i,j \in V(G)} \E_i[T_j]. \nonumber
@@ -290,10 +301,11 @@ using first step analysis on the probability of reaching $a$ before $b$.
 
 We begin in \cref{sec:small_example}.
 (\cref{sec:structured_graphs} primarily relies on \cite{BH94}.)
-We see that it is always possible to exactly calculate the cover time
-of graph but it is in general very difficult to do so.
+We see that while in principle it is always possible to exactly 
+calculate the cover time
+of graph, it is in general very difficult to do so.
 For the remainder of this section, we investigate
-structured graphs that are exceptions to the rule:
+structured graphs for which exact cover time analysis is tractable:
 the complete graph, line graphs, and simple cycles.
 
 \cref{sec:bounds} deals with the large or unstructured graphs 
@@ -599,11 +611,12 @@ from $i-1$ to $i$ unique vertices (excluding the current vertex).
 
 We write the cover time in terms of $X_i$ and use linearity of expectation.
 \begin{align}
-\tcov&= \E[X_1+X_2+X_3+\cdots+X_{n-1}] = \sum_{i=1}^{n-1} \E[X_i] \nonumber
+\tcov&= \E[X_1+X_2+X_3+\cdots+X_{n}] = \sum_{i=1}^{n} \E[X_i] \nonumber
 \end{align}
 
 The random variable $X_i$ takes value $k$ when $k-1$ steps lead us to
-already visited vertices and the $k^{th}$ step is to a previously unvisited vertex.
+already visited vertices and the $k^{th}$ step is 
+to a previously unvisited vertex.
 Then $X_i$ is certainly geometric and $\E[X_i] = 1/p_i$. 
 
 \begin{comment}
@@ -614,12 +627,13 @@ It follows that $X_i$ is geometric with distribution
 where $p_i$ is the probability of moving to a previously unvisited vertex.
 \end{comment}
 We now find the probability $p_i$ that 
-we go to a previously unvisited vertex is $(n-i)/(n-1)$.
-This is because there are $n-i$ unvisited vertices and a total of $n-1$ adjacent vertices.
-It follows that $\E[X_i] = (n-1)/(n-i)$.
+we go to a previously unvisited vertex is $(n-i+1)/(n-1)$.
+This is because there are $n-i+1$ unvisited 
+vertices and a total of $n-1$ adjacent vertices.
+It follows that $\E[X_i] = (n-1)/(n-i+1)$.
 Then
 \begin{align}
-\tcov&=   \sum_{i=1}^{n-1} \frac{n-1}{n-i} \nonumber \\
+\tcov&=   \sum_{i=1}^{n} \frac{n-1}{n-i+1} \nonumber \\
 &=  (n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+\cdots+1\right). \nonumber
 \end{align}
 
@@ -870,7 +884,7 @@ until we visit $n$ distinct integers.
 
 Let $\{a, a+1, \ldots, b-1, b\}$ 
 denote the set of vertices we have visited.
-Since the walk is on a line, we can $[a,b]$ for the range
+Since the walk is on a line, we can write $[a,b]$ for the range
 of the walk where $a$ is the smallest 
 and $b$ is the largest vertex we have visited.
 Notice that if $a \leq -n$ or $b \geq n$, we have covered all $n$ vertices
@@ -881,7 +895,7 @@ number of steps until we reach $k$ distinct vertices.
 Formally, $T_k = \min\{t: b-a+1 = k\}$.
 Then by telescoping,
 \begin{align}
-\tcov &= \E[T_n] = \E[(T_2 - T_1) + (T_3 - T_2) + \cdots + 
+\tcov &= \E_0[T_n] = \E[(T_2 - T_1) + (T_3 - T_2) + \cdots + 
 (T_k - T_{k-1}) + \cdots + (T_n - T_{n-1})] \nonumber
 \end{align}
 
@@ -946,11 +960,27 @@ we return to $a$ before we finally reach $b$ (and again return to $a$).
 
 Recall that $\pi_a$ is the probability that $(X_t) = a$.
 By a similar argument, $1/\pi_a$ is the expected return time to $a$.
+If we condition on reaching $b$ before turning to $a$,
+\begin{align}
+\frac{1}{\pi_a} &= \E_a[T_a] =
+\E_a[T_a|T_b < T_a] \pr(T_b<T_a) +
+\E_a[T_a|T_a < T_b] \pr(T_a<T_b) \nonumber.
+\end{align}
 
-Thus the expected time from $a$ to $b$ and back is
-the expected number of returns to $a$ before we reach $b$ times
-the expected number of steps for each return to $a$.
-The commute time identity follows
+Considering the cases that we either reach $b$ or not before
+returning to $a$,
+\begin{align}
+\E_a[T_b] + \E_b[T_a] &= 
+\E_a[T_a | T_b < T_a] + 
+\E_a[T_a | T_a < T_b] (\frac{1}{\pr(T_b<T_a)} - 1) \nonumber.
+\end{align}
+Observe that $1/\pr(T_b<T_a)-1 = (1-\pr(T_b<T_a))/\pr(T_b<T_a)$, 
+which simplifies to $\pr(T_a<T_b)/\pr(T_b<T_a)$.
+Multiplying by the probability we reach $b$ before returning to $a$,
+\begin{align}
+\E_a[T_a|T_b < T_a] \pr(T_b<T_a) + \E_a[T_a|T_a<T_b] \pr(T_a<T_b)=\frac{1}{\pi_a} \nonumber
+\end{align}
+and the commute identity follows
 \begin{align}
 E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a}\frac{1}{\pr_a(T_b < T_a)} = \Reff C.
 \label{eqn:commute}

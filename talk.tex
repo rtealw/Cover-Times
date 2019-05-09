@@ -433,30 +433,25 @@ all visited.
 
 \section{Cover Time Distribution of the a Complete Graph with Self-edges}
 
-\begin{frame}{Poisson Distribution}
+\begin{frame}{Cover Time Distribution}
 After $r$ steps of a random walk, let $A_i$ be the event that
 vertex $i$ is unvisited.
 \begin{align}
-\pr(A_i) = (1-1/n)^r \nonumber
+\pr(A_i) = \pr(\textrm{not visited in one step})^r = (1-1/n)^r \nonumber
 \end{align}
 \pause
 Let $N_n$ be the number of unvisited vertices.
 \begin{align}
-\E[N_n] &= n(1-1/n)^r \nonumber  \\
-&=n[(1-1/n)^n]^{r/n} = n e^{-r/n} \nonumber
-\end{align}
-\pause
-I promise that 
-\begin{align}
-N_n/n &\xrightarrow{p} \E[N_n/n] \nonumber
+\E[N_n] &= \sum_{i=1}^n \pr(A_i) = n(1-1/n)^r \nonumber  \\
+&=n[(1-1/n)^n]^{r/n} \sim n e^{-r/n} \nonumber
 \end{align}
 
 \end{frame}
 
-\begin{frame}{Poisson Distribution}
+\begin{frame}{Cover Time Distribution}
+Introduce $x$ and set $r = n \log n + nx$.
 \begin{align}
-r &= n \log n + nx \nonumber \\
-N_n &= ne^{-r/n} = ne^{-\log n - x} = n n^{-1} e^{-x} \rightarrow  e^{-x} \nonumber
+N_n &\sim ne^{-r/n} = ne^{-\log n - x} = n n^{-1} e^{-x} \rightarrow  e^{-x} \nonumber
 \end{align}
 \begin{theorem}
 If $ne^{-r/n} \rightarrow \lambda \in [0, \infty)$, then the number of unvisited
@@ -464,8 +459,9 @@ vertices approaches a Poisson distribution with mean $\lambda$.
 \end{theorem}
 \pause
 \begin{align}
-\pr(N_n=0) = \pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber \\
-\pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}} \nonumber
+\pr(N_n=0) = \pr(\cov \leq r)
+= \pr(\cov - n \log n\leq nx)
+\rightarrow e^{-e^{-x}} \nonumber
 \end{align}
 \end{frame}
 
