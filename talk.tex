@@ -407,8 +407,8 @@ Let $T_k$ be the first time vertices
 $\sigma_1, \sigma_2, \ldots, \sigma_k$ have all been visited.
 \pause
 \begin{align}
-\E[\cov] &\leq \E_n[{T_{n-1}}]  \nonumber \\
-&\leq \E_n[T_1 + (T_2 - T_1) + \cdots + (T_{n-1} - T_{n-2})] . \nonumber
+\E[\cov] &= \E_n[{T_{n-1}}]  \nonumber \\
+&\leq \E_n[T_1 + (T_2 - T_1) + \cdots + (T_{n-1} - T_{n-2})] \nonumber
 \end{align}
 
 
@@ -422,10 +422,10 @@ all visited.
 \begin{align}
 \E_n[T_k - T_{k-1}] &=
 \sum_{i=1}^k \E_n[T_k - T_{k-1} | L(k) = \sigma_i]
-\pr(L_k = \sigma_i). \nonumber
+\pr(L_k = \sigma_i) \nonumber
 \only<3->{\\&= 0 +
 \E_n[T_k - T_{k-1} | L(k) = \sigma_k]
-\pr(L_k = \sigma_k). \nonumber 
+\pr(L_k = \sigma_k) \nonumber 
 }
 \only<4->{\\&\leq t_{hit} \frac{1}{k} \nonumber }
 \end{align}
@@ -492,6 +492,9 @@ How about a town of 2190?
 \end{frame}
 
 \begin{frame}{Thank you!}
+\centering
+github.com/rtealw/Cover-Times
+\medskip
 \begin{thebibliography}{9}
 
 \bibitem{AF14}
