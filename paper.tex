@@ -348,7 +348,7 @@ But even on \cref{fig:example} where we exploit symmetry,
 there are almost a prohibitive number.
 It is easy to see that the number of cases 
 grows exponentially with the number of vertices.
-
+\begin{comment}
 \begin{figure}[ht]
 	\centering
 		\begin{tikzpicture} [
@@ -514,6 +514,7 @@ grows exponentially with the number of vertices.
 				    \node[visited] (tr) at (1,1) {};;
 				\end{tikzpicture}
 			};
+			\end{comment}
 			\begin{comment}
 		    \path[->] (m) edge node[above] {$\frac{1}{3}$} (a);	
 		    \path[->] (m) edge node[below] {$\frac{2}{3}$} (b); 
@@ -533,6 +534,7 @@ grows exponentially with the number of vertices.
 			\path[->] (f) edge node[below] {$\frac{1}{2}$} (done);
 			\path[->] (g) edge node[right] {$\frac{1}{3}$} (done);
 			\end{comment}
+			\begin{comment}
 			\path[->] (m) edge (a);
 			\path[->] (m) edge (b);
 			\path[->] (a) edge[loop above, distance=6mm] (a);
@@ -553,10 +555,176 @@ grows exponentially with the number of vertices.
 	\end{tikzpicture}
 	\caption{First step analysis applied to a small graph with $n=4$.}\label{fig:example}
 \end{figure}
+\end{comment}
+
+\begin{figure}[ht]
+	\centering
+		\begin{tikzpicture} [
+            > = stealth, % arrow head style
+            shorten > = 1pt, % don't touch arrow head to node
+            %auto,
+            node distance = 3cm, % distance between nodes
+            semithick % line style
+        ]
+
+			\tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+
+			\node (A) at (-1.2,2.5) {
+				\begin{tikzpicture}[scale = 3]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.1) {A};
+				    \node (bl) at (0,0) {};
+				    \node (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[current] (tr) at (1,1) {};
+				\end{tikzpicture}
+			};
+			\node (B) at (2,3.5) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.3) {B};
+				    \node (bl) at (0,0) {};
+				    \node[current] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (C) at (2,1) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, -.3) {C};
+				    \node (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[current] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (D) at (4,3.5) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.3) {D};
+				    \node[current] (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (E) at (4,1) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, -.3) {E};
+				    \node (bl) at (0,0) {};
+				    \node[current] (tl) at (0,1) {};
+				    \node[visited] (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (F) at (6,3.5) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.3) {F};
+				    \node[visited] (bl) at (0,0) {};
+				    \node[current] (tl) at (0,1) {};
+				    \node (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};		
+			\node (G) at (6, 1) {
+				\begin{tikzpicture}[scale = 1]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, -.3) {G};
+				    \node (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node[visited] (br) at (1,0) {};
+				    \node[current] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\node (H) at (9.2, 2.5) {
+				\begin{tikzpicture}[scale = 3]
+				    \tikzstyle{edge}=[draw,line width = .5pt,-,black!100]
+				    \tikzstyle{current}=[draw,circle,fill=black,scale=.5]
+				    \tikzstyle{visited}=[draw,circle,fill=white,scale=.5]
+				    \draw[edge] (0,0) -- (0,1);
+				    \draw[edge] (0,0) -- (1,0);
+				    \draw[edge] (0,1) -- (1,0);
+				    \draw[edge] (0,1) -- (1,1);
+				    \draw[edge] (1,1) -- (1,0);
+				    \node (l) at (.5, 1.1) {H};
+				    \node[visited] (bl) at (0,0) {};
+				    \node[visited] (tl) at (0,1) {};
+				    \node[visited] (br) at (1,0) {};
+				    \node[visited] (tr) at (1,1) {};;
+				\end{tikzpicture}
+			};
+			\path[->] (A) edge (B);
+			\path[<->] (B) edge (C);
+			\path[->] (B) edge (D);
+			\path[->] (B) edge (E);
+			\path[->] (C) edge (E);
+			\path[<->] (D) edge (F);
+			\path[->] (D) edge[bend left, distance=12mm] (H);
+			\path[<->] (E) edge (G);
+			\path[->] (E) edge[bend right, distance=15mm] (H);
+			\path[->] (E) edge[loop above, distance=5mm] (E);
+			\path[->] (F) edge (H);
+			\path[->] (G) edge (H);
+	\end{tikzpicture}
+	\caption{First step analysis applied to a small graph with $n=4$.}\label{fig:example}
+\end{figure}
 
 If we let the label of each graph in \cref{fig:example}
 denote the cover time from that case, we have the following system
 of equations:
+\begin{comment}
 \begin{align}
 &\tcov = 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{b}
 &\textrm{a} = 1 + \frac{1}{3}\textrm{a} + \frac{2}{3}\textrm{c} \nonumber \\
@@ -567,8 +735,21 @@ of equations:
 &\textrm{f} = 1 + \frac{1}{2}\textrm{g} + \frac{1}{2}\dot 0
 &\textrm{g} = 1 + \frac{2}{3}\textrm{f} + \frac{1}{3}\dot 0\nonumber
 \end{align}
+\end{comment}
+\begin{align}
+\tcov = &\textrm{A} = 1 + \textrm{B}
+&\textrm{B} = 1 + \frac{1}{2}\textrm{C} + \frac{1}{2}\textrm{D} \nonumber \\
+&\textrm{C} = 1 + \frac{1}{2}\textrm{B} + \frac{1}{2}\textrm{E}
+&\textrm{D} = 1 + \frac{1}{2}\textrm{F} + \frac{1}{2}\textrm{H} \nonumber \\
+&\textrm{E} = 1 + \frac{1}{3}\textrm{E} + \frac{1}{3}\textrm{G} + \frac{1}{3}\textrm{H}
+&\textrm{F} = 1 + \frac{1}{2}\textrm{D} + \frac{1}{2}\textrm{F} \nonumber \\
+&\textrm{G} = 1 + \frac{1}{2}\textrm{E} + \frac{1}{2}\textrm{H}
+&\textrm{H} = 0\nonumber
+\end{align}
 
-With a little linear algebra, we find that $\tcov = 43/6$.
+With a little linear algebra, we find that $\tcov = 43/5$.
+We leave it as an exercise to the reader to verify that the time
+to visit all vertices from the other starting vertex is $43/6$.
 
 For large graphs, the first step analysis as an approach to finding the expected
 cover time is obviously intractable.
@@ -895,7 +1076,7 @@ number of steps until we reach $k$ distinct vertices.
 Formally, $T_k = \min\{t: b-a+1 = k\}$.
 Then by telescoping,
 \begin{align}
-\tcov &= \E_0[T_n] = \E[(T_2 - T_1) + (T_3 - T_2) + \cdots + 
+\tcov &= \E[T_n] = \E[(T_2 - T_1) + (T_3 - T_2) + \cdots + 
 (T_k - T_{k-1}) + \cdots + (T_n - T_{n-1})] \nonumber
 \end{align}
 
@@ -967,8 +1148,12 @@ If we condition on reaching $b$ before turning to $a$,
 \E_a[T_a|T_a < T_b] \pr(T_a<T_b) \nonumber.
 \end{align}
 
-Considering the cases that we either reach $b$ or not before
-returning to $a$,
+The expected commute time between $a$ and $b$ is the
+expected return time to $a$ given we reach $b$ plus
+the expected return time to $a$ given we do not reach $b$ times
+the number of times we return to $a$ before the success when
+we reach $b$.
+Formally, we write
 \begin{align}
 \E_a[T_b] + \E_b[T_a] &= 
 \E_a[T_a | T_b < T_a] + 
@@ -1011,8 +1196,9 @@ Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matth
 \end{align}
 
 \begin{proof}
-Without loss of generality, label the vertices $\{1, 2, \dots, n\}$.
-We may assume that the walk started at vertex $n$.
+Without loss of generality, label the vertices $\{1, 2, \dots, n\}$
+such that $n$ is the vertex from which it takes the most steps to cover
+the remaining vertices.
 Let $\sigma$ be a uniform permutation of the unvisited $n-1$ vertices.
 The strategy is to look for the vertices in order $\sigma$.
 
@@ -1026,7 +1212,7 @@ We begin by writing the cover time in a clever way
 (similar to the strategy we employed on the cycle graph):
 \begin{align}
 \tcov &= \E_n[{T_{n-1}}]  \nonumber \\
-&= \E_n[T_1 + (T_2 - T_1) + \cdots + 
+&\leq \E_n[T_1 + (T_2 - T_1) + \cdots + 
 (T_k - T_{k-1}) + \cdots + (T_{n-1} - T_{n-2})] . \nonumber
 \end{align}
 
@@ -1088,9 +1274,11 @@ The same strategy for the Matthews upper bound can be used
 to find a lower bound.
 Instead of looking for all $n$ vertices, we search
 for $A \subseteq V(G)$.
-When the hitting time is large between any two vertices in $A$,
-the time to visit all of $A$ is a good lower bound on the cover time
-of $V(G)$.
+The Matthews lower bound will always hold.
+However, we can tighten the bound by picking $A$ such
+that the hitting time is large between any pair of vertices.
+We use large in a relative sense and 
+offer an illustrative example in \cref{sec:binary}.
 
 \begin{theorem}[Matthews Lower Bound]
 Let $A \subseteq V(G)$. Define $\tmina = \min_{a,b\in A, a \neq b} \E_b[T_a]$.
@@ -1218,7 +1406,9 @@ By \cref{eqn:commute}, the commute time between the root and a leaf $a$ is
 \begin{align}
 C R_{\rho, a} = 2 (n-1) k \nonumber.
 \end{align}
-Note that effective resistance adds in series so $\Rxy = i$ where $i$
+Note that resistance adds in series so 
+effective resistance is just the sum of the resistances along a path.
+Then $\Rxy = i$ where $i$
 is the length of the single path between $x$ and $y$.
 
 We first use the Matthews Upper Bound.
@@ -1236,8 +1426,9 @@ Then
 and \cref{thm:matthews_up} gives
 \begin{align}
 \tcov &\leq 2(n-1)k\left(1 + \frac{1}{2} + \cdots + \frac{1}{n} \right) \nonumber \\
-&\approx (2 - \frac{2}{n}) \cdot n k \log n \approx (2 - \frac{2}{n}) n k \log 2^{k+1} -1 \nonumber \\
-&\approx (2  + o(1)) \cdot n k^2 \log 2 \nonumber
+&\sim (2 - \frac{2}{n}) \cdot n k \log n 
+\sim(2 - \frac{2}{n}) n k \log 2^{k+1} -1 \nonumber \\
+&\sim(2  + o(1)) \cdot n k^2 \log 2 \nonumber
 \end{align}
 
 We now use the Matthews Lower Bound.
@@ -1261,7 +1452,7 @@ In the worst case, $h' = h-1$.
 Then by \cref{thm:matthews_low},
 \begin{align}
 \tcov &\geq 2 (n-1)(k-h+1)\left(1 + \frac{1}{2} + \cdots + \frac{1}{2^h -1} \right) \nonumber \\
-&\approx (2 + o(1)) \cdot n (k-h) h \log 2 \nonumber.
+&\geq (2 + o(1)) \cdot n (k-h) h \log 2 \nonumber.
 \end{align}
 
 If $h=\lfloor k/2 \rfloor$,
@@ -1309,6 +1500,7 @@ such that $|E(\T)| = n-1$ and $\T$ is connected.
 In \cref{sec:commute}, we fixed vertices $a$ and $b$ and called
 the effective resistance between them $\Reff$.
 We now consider $\Rxy$ the effective resistance between vertices $x$ and $y$.
+Recall that $C$ is the sum of the conductances of every vertex in our graph.
 
 \begin{theorem}[Spanning Tree Upper Bound] \label{thm:span}
 For any spanning tree $\T$ on a weighted graph,
@@ -1329,8 +1521,8 @@ and covers every vertex.
 We construct this path by starting at $v$ and walking along all $n-1$ edges to the
 other vertex with only one edge and then coming back to $v$.
 
-The expected time of this particular path on the original graph is certainly less than
-or equal to the cover time. That is,
+The expected time of this particular path on the original graph is certainly 
+greater than or equal to the cover time. That is,
 \begin{align}
 \tcov &\leq \sum_{i=0}^{2n-3} \E_{v_i}[T_{v_{i+1}}]. \nonumber
 \end{align}
@@ -1390,17 +1582,25 @@ If $r/n \rightarrow c$, then
 We compute the variance of $N_n$ by finding $\E[N_n^2]$ and $\E[N_n]^2$.
 Let $\I_m$ be the indicator random variable for event $A_m$.
 That is, $\I_m = 1$ if vertex $m$ is unvisited 0 otherwise.
-We already know $\E[N_n]$ so we want to find $\E[N_n^2]$,
+We first find $\E[N_n^2]$
 \begin{align}
 \E[N_n^2] &= \E \left[ \left(\sum_{m=1}^n \I_m \right) ^2 \right] =
 \E \left[ \sum_{m=1}^n \sum_{k=1}^n \I_m \I_k \right] =
 \sum_{1 \leq k, m \leq n} \pr(A_k \cap A_m). \nonumber
 \end{align}
-
 The second equality holds since we distribute terms.
 The third equality holds since the mean of an indicator for event $A_m$
-is the probability of $A_m$.
-Putting both terms together, we find the variance
+is the probability of $A_m$ and both events must occur for
+us to have a nonzero term.
+Then we find $\E[N_n]^2$
+\begin{align}
+\E[N_n]^2 &= \E \left[ \left(\sum_{m=1}^n \I_m \right)
+\left( \sum_{k=1}^n \I_k \right) \right] =
+\sum_{1 \leq k, m \leq n} \pr(A_k) \pr(A_m).
+\nonumber
+\end{align}
+
+Putting both together, we find the variance
 \begin{align}
 \Var[N_n] &= \E[N_n^2] - \E[N_n]^2 \nonumber \\
 &= \sum_{1 \leq k, m \leq n} \pr(A_k \cap A_m) - P(A_k)P(A_m) \nonumber \\
@@ -1424,7 +1624,7 @@ By Chebyshev's Inequality,
 \rightarrow 0. \nonumber
 \end{align}
 
-Thus we conclude that $N_n/n \rightarrow \E[N_n/n] = e^{-c}$ in probability. 
+Thus we conclude that $N_n/n \rightarrow e^{-c}$. 
 
 The Poisson approximation of the binomial implies that if $n \rightarrow \infty$
 and $r/n \rightarrow c$, then the number of visits to each vertex will approach
@@ -1551,16 +1751,15 @@ We use \cref{thm:pois} to find the distribution of the cover time variable $\cov
 Set $r = n \log n + nx$.
 Then 
 \begin{align}
-ne^{-r/n} &= n e ^{- \log n - x} \nonumber \\
-&= n e^{- \log n} e^ {- x} = e^{-x}.\nonumber
+ne^{-r/n} &= n e ^{- \log n - x} = n n ^{-1} e^ {- x} = e^{-x}.\nonumber
 \end{align}
 
 Using the fact that $\cov \leq m$ if and only if the first $m$ steps
 of the random walk visit all $n$ vertices
 and $ne^{-r/n} \rightarrow e^{-x}$ as the assumption of \cref{thm:pois},
 \begin{align}
-\pr(\cov \leq r) &\rightarrow e^{-e^{-x}} \nonumber \\
-\pr(\cov - n \log n\leq nx) &\rightarrow e^{-e^{-x}}. \label{eqn:dist}
+P(N_n=0) = \pr(\cov \leq r) = \pr(\cov - n \log n\leq nx) 
+&\rightarrow e^{-e^{-x}}. \label{eqn:dist}
 \end{align}
 
 \subsection{The Birthday Problem}\label{sec:birthday}
