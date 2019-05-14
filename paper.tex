@@ -137,7 +137,7 @@
 
 \abstract{
 The cover time of a graph is the number of steps a 
-discrete random walk takes to visit vertex at least once.
+discrete random walk takes to visit every vertex at least once.
 We begin by investigating the cover time of small and structured graphs but
 quickly find that our precise strategy fails
 for larger, unstructured ones.
@@ -169,7 +169,7 @@ Assuming all 365 days of the year, excluding February 29, are equally likely,
 how many people would we need to ensure each birthday is represented
 by at least one person?
 A lower bound is certainly 365 but it is possible to get an arbitrarily
-large population without covering each birthday.
+large population without `covering' every birthday.
 
 Other applications of cover times include universal travel sequences,
 graph connectivity algorithms, and protocol testing.
@@ -193,7 +193,7 @@ between vertices $i$ and $j$.
 We will mostly consider unweighted graphs,
 meaning $C_{i,j} = 1$ if $i \sim j$ and $C_{i,j} = 0$ otherwise.
 
-Define the weight of vertex $i$ 
+Define the weight of vertex $i$ as
 \begin{align}
 C_i &= \sum_{j:i \sim j} C_{i,j}. \nonumber
 \end{align}
@@ -214,10 +214,10 @@ T_{j} &= \textrm{min} \left\{t > 0 : X_t = j \right\}. \nonumber
 Let $\E_i[T_j] = \E[T_j | X_0 = i]$.
 This is the expected time of the first visit to $j$ given
 that the random walk started in vertex $i$.
-Then $\E_j[T_j]$ is the return time to $j$.
+Then $\E_j[T_j]$ is the return time to $j$
+since $t$ is strictly positive.
 Now define the hitting time $\hit$ for the graph
 be the maximum expected time between two vertices on $G$.
-
 Formally, 
 \begin{align}
 \hit &= \max_{i,j \in V(G)} \E_i[T_j]. \nonumber
@@ -252,6 +252,8 @@ For the rest of this section, we will call $C_{x,y}$
 the conductance between $x$ and $y$.
 Define the resistance $R_{x,y}$ between $x$ and $y$
 as $1/ C_{x,y}$.
+(We will soon justify the electrical network interpretation of
+a random walk using Ohm's Law.)
 
 We now consider the distribution of the random
 walk on the vertices of our graph.
@@ -271,22 +273,26 @@ Summing over $x$,
 \begin{align}
 \sum_x \pi_x \pr_{x,y} = \pi_y . \nonumber
 \end{align}
-Then $\pi \pr = \pi$ where $\pr$ is the matrix of transition probabilities.
-It follows that $\pi$ is indeed the stationary distribution of $(X_t)$.
+In the language of Markov Chains,
+$\pi \pr = \pi$ where $\pr$ is the matrix of transition probabilities.
+It follows that $\pi$ is the stationary distribution of $(X_t)$.
+The takeaway for the reader unfamiliar with Markov Chains is that
+$\pi_y$ is indeed the long term proportion of time spent in vertex $y$.
 
 We now introduce voltage, current, and effective resistance.
 Consider $a$ and $b$ in $V(G)$.
 Set the voltage to be 1 at $a$ and 0 at $b$.
-We may think of voltage as the probability we get to $a$ before $b$.
-Probabilistically, of course $v_a = 1$ and $v_b=0$.
+We may think of voltage as the probability we get to $a$ before $b$:
+$v_a$ the probability we get to $a$ before $b$ from $a$
+is 1 and $v_b$ the probability we get to $a$ before $b$ from $b$ is 0.
 The voltage at every vertex $x$ in  $V(G) \textbackslash \{a,b\}$
 is determined by the boundary values (at $a$ and $b$).
 
-The current between two vertices is the product of the
+By Ohm's Law, the current between two vertices is the product of the
 difference in their voltages and the conductance of their edge.
 We may think of current as the net number of movements through an edge.
 Kirchoff's Current Law says that the sum of current on any vertex is 0.
-Probabilistically, of course every time we enter a vertex we must also leave it.
+Probabilistically: every time we enter a vertex we must also leave it.
 Using Kirchoff's Current Law and the definition of current,
 we justify the probabilistic interpretation of voltage
 \begin{align}
@@ -295,7 +301,7 @@ v_x \sum_y C_{x,y} &= \sum_y C_{x,y} v_y \nonumber \\
 v_x &= \sum_y \frac{C_{x,y}}{C_x} v_y = \sum_y \pr_{x,y} v_y. \nonumber
 \end{align}
 We can verify that $v_x = \sum_y \pr_{x,y} v_y$
-using first step analysis on the probability of reaching $a$ before $b$.
+using total probability on the likelihood of reaching $a$ before $b$ from $x$.
 
 \subsection{Outline}
 
@@ -309,7 +315,7 @@ structured graphs for which exact cover time analysis is tractable:
 the complete graph, line graphs, and simple cycles.
 
 \cref{sec:bounds} deals with the large or unstructured graphs 
-for which we must use bounds.
+for which we must use cover time bounds.
 We begin by establishing an important identity between
 commute times and effective resistance in \cref{sec:commute}.
 (Our electrical network analysis is an extension of \cite{DS84}
@@ -321,8 +327,8 @@ to bound the cover time of a binary tree.
 In \cref{sec:spanning}, we follow \cite{AF14} and use the idea of a spanning tree
 as well as the commute time identity to develop another bound for general graphs.
 
-Up until \cref{sec:dist}, we have only considered the expected cover time.
-We now delve into the distribution of the cover time of a complete graph.
+Up until \cref{sec:dist}, we only consider expected cover time.
+We now delve into the distribution of the cover time on a complete graph with self-edges.
 We draw on \cite{Du11} and find that the cover time variable approaches a Poisson
 distribution.
 In \cref{sec:birthday}, we apply \cref{sec:complete_dist} to the birthday problem.
@@ -336,7 +342,7 @@ of a graph using first step analysis.
 We demonstrate the strategy on a small graph suggested by \cite{BH94}.
 
 \cref{fig:example} shows our small graph and the first step analysis
-for the random walk $(X_t)$ started from the top left vertex.
+for the random walk $(X_t)$ started from the top right vertex.
 The black circle indicates the current vertex of the random walk
 and the empty circles indicate the visited vertices.
 
@@ -749,12 +755,12 @@ of equations:
 
 With a little linear algebra, we find that $\tcov = 43/5$.
 We leave it as an exercise to the reader to verify that the time
-to visit all vertices from the other starting vertex is $43/6$.
+to visit all vertices from the other (i.e. symmetrically distinct) vertex is $43/6$.
 
 For large graphs, the first step analysis as an approach to finding the expected
 cover time is obviously intractable.
 The rest of this section deals with particularly symmetric graphs
-for which it is possible to find a solution for an arbitrary $n$.
+for which it is possible to find a solution for an arbitrary number of vertices $n$.
 However, we must rely on cover time bounds for the vast majority of cases.
 
 \subsection{Complete Graph}\label{sec:complete}
@@ -778,7 +784,7 @@ Note that a complete graph with $n$ vertices has ${n \choose 2}$ edges.
 	    \node at (\pgfmathresult:4.4cm) {};
 	  };
 	\end{tikzpicture}
-    \caption{The complete graph with six vertices (and ten edges).}\label{fig:complete}	
+    \caption{The complete graph with six vertices (and 15 edges).}\label{fig:complete}	
 \end{figure}
 
 Our goal is to find the expected number of steps until we have visited all
@@ -788,7 +794,7 @@ because the graph is symmetric.
 The strategy is to write the cover time $\tcov$ in terms of the expected
 value of more simple random variables.
 Let $X_i$ be the random variable that represents the number of steps to go
-from $i-1$ to $i$ unique vertices (excluding the current vertex).
+from $i-1$ to $i$ distinct vertices.
 
 We write the cover time in terms of $X_i$ and use linearity of expectation.
 \begin{align}
@@ -812,9 +818,10 @@ we go to a previously unvisited vertex is $(n-i+1)/(n-1)$.
 This is because there are $n-i+1$ unvisited 
 vertices and a total of $n-1$ adjacent vertices.
 It follows that $\E[X_i] = (n-1)/(n-i+1)$.
+Since we start at a vertex, $\E[X_i]=0$.
 Then
 \begin{align}
-\tcov&=   \sum_{i=1}^{n} \frac{n-1}{n-i+1} \nonumber \\
+\tcov&=   0+\sum_{i=2}^{n} \frac{n-1}{n-i+1} \nonumber \\
 &=  (n-1) \left(\frac{1}{n-1}+\frac{1}{n-2}+\cdots+1\right). \nonumber
 \end{align}
 
@@ -827,13 +834,13 @@ We then move from vertex to vertex with uniform probability.
 The difference between the coupon collector problem and the complete graph
 is that we now have self-edges
 whereas before we had to leave our current vertex at each step.
-That is, we can stay in the same vertex (if the collector receives the same coupon
-two days in a row).
+That is, we can now stay in the same vertex (provided the collector 
+receives the same coupon two days in a row).
 We apply our approach to the complete graph and substitute the $r$ possible coupons
 we can find for the $n-1$ vertices we could move to.
 Then
 \begin{align}
-\tcov&=  r \left(\frac{1}{r}+\frac{1}{r-1}+\cdots+1\right). \nonumber
+\tcov&=  r \left(\frac{1}{r-1}+\frac{1}{r-2}+\cdots+1\right). \nonumber
 \end{align}
 
 Another more subtle application of the cover time on a complete graph
@@ -891,9 +898,8 @@ We can use this observation to break up the cover time into the time it takes
 to reach one of the endpoints and the time it takes to reach 
 the other endpoint.
 
-We will begin by considering the time $(X_t)$ takes to
+We will begin by considering the time a random walk takes to
 visit either one of the endpoints from vertex $i$.
-
 From $X_t=i$, we move with equal probability to $i+1$
 and $i-1$ until we reach either $0$ or $N$.
 
@@ -1018,7 +1024,7 @@ It will take us $\E_{i-1}[T_i]$ steps back to $i$ and then another
 $\E_i[T_{i+1}]$ steps to $i+1$.
 Formally,
 \begin{align}
-\E_{i}[T_{i+1}] &= 1 + \frac{1}{2}(\E_{i-1}[T_i]+\E_i[T_{i+1}]) \nonumber \\
+\E_{i}[T_{i+1}] &= 1 + \frac{1}{2}(\E_{i-1}[T_i]+\E_i[T_{i+1}]) +\frac{1}{2}0 \nonumber \\
  &= 2 + \E_{i-1}[T_{i}]. \nonumber
 \end{align}
 
@@ -1030,11 +1036,10 @@ E_i[T_{i+1}] &= E_{i-1}[T_{i}] + 2 = E_{i-2}[T_{i-1}] + 4 \nonumber\\
 
 Then
 \begin{align}
-\E_0[T_N] &= 1 + 3 + \cdots + 2i - 1 + \cdots + 2(N-1) -1 \nonumber \\
-&= N^2 \nonumber
+\E_0[T_N] &= 1 + 3 + \cdots + 2i - 1 + \cdots + 2(N-1) -1 = N^2 \nonumber
 \end{align}
 
-Then, by \cref{thm:line}, for the random walk from state $i$ on the line graph,
+By \cref{thm:line}, for the random walk from state $i$ on the line graph,
 \begin{align}
 \tcov = i(N-i) + N^2. \nonumber
 \end{align}
@@ -1050,7 +1055,7 @@ Consider a random walk on a simple cycle as in \cref{fig:cycle}.
 Let $(X_t)$ be the walk on the number line (between $-n$ and $n$)
 where $X_0 = 0$.
 The cover time $\tcov$ of the simple cycle is the expected number of steps 
-until we visit $n$ distinct integers.
+until we visit $n$ distinct integers on the number line.
 
 \begin{figure}[ht]
 	\centering
@@ -1093,7 +1098,7 @@ By linearity of expectation,
 &= 1 + 2 + \cdots + k-1 + \cdots + n-1  = \frac{1}{2}n(n-1). \nonumber
 \end{align}
 
-\section{Bounds}\label{sec:bounds}
+\section{Cover Time Bounds}\label{sec:bounds}
 
 \subsection{Commute Time Identity} \label{sec:commute}
 \cite{DS84} We use the electrical network analysis in \cref{sec:electric} to 
@@ -1116,7 +1121,7 @@ C_a(1-\sum_y\pr_{a,y}v_y).\nonumber
 \end{align}
 
 Recall $\sum_y P_{a,y} v_y$ is the probability we reach $a$ before $b$
-so 1 minus that is the probability we reach $b$ before returning to $a$.
+so the complement is the probability we reach $b$ before returning to $a$.
 
 Then
 \begin{align}
@@ -1139,7 +1144,7 @@ Each ``failure'' resets the process so $\pr_a(T_b < T_a)$ is geometrically distr
 Then the expected value $1/\pr_a(T_b < T_a)$ is the expected number of times
 we return to $a$ before we finally reach $b$ (and again return to $a$).
 
-Recall that $\pi_a$ is the probability that $(X_t) = a$.
+Recall that $\pi_a$ is the stationary probability that $(X_t) = a$.
 By a similar argument, $1/\pi_a$ is the expected return time to $a$.
 If we condition on reaching $b$ before turning to $a$,
 \begin{align}
@@ -1149,11 +1154,7 @@ If we condition on reaching $b$ before turning to $a$,
 \end{align}
 
 The expected commute time between $a$ and $b$ is the
-expected return time to $a$ given we reach $b$ plus
-the expected return time to $a$ given we do not reach $b$ times
-the number of times we return to $a$ before the success when
-we reach $b$.
-Formally, we write
+random sum expectation,
 \begin{align}
 \E_a[T_b] + \E_b[T_a] &= 
 \E_a[T_a | T_b < T_a] + 
@@ -1167,7 +1168,7 @@ Multiplying by the probability we reach $b$ before returning to $a$,
 \end{align}
 and the commute identity follows
 \begin{align}
-E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a}\frac{1}{\pr_a(T_b < T_a)} = \Reff C.
+E_a[T_b] + E_b[T_a] = \frac{1}{\pi_a \pr_a(T_b < T_a)} = \Reff C.
 \label{eqn:commute}
 \end{align}
 
@@ -1217,7 +1218,6 @@ We begin by writing the cover time in a clever way
 \end{align}
 
 Our goal is to bound the cover time in terms of the hitting time.
-
 Consider the first term of the sum.
 Recall that the hitting time $\hit$ is the maximum
 expected time from any vertex to any other.
@@ -1250,9 +1250,7 @@ Then
 
 Since $\sigma$ is a random permutation, the probability that
 we visit $\sigma_k$ last is $1/k$.
-Formally, $P(L_k = \sigma_k) = 1/k$.
-
-Finally, we find the expected time between $T_{k-1}$ and $T_{k}$
+Now we find the expected time between $T_{k-1}$ and $T_{k}$
 given that last vertex we visit is $\sigma_k$.
 Consider $r$ and $s$ where $1 \leq r \neq s \leq n-1$
 such that $L_{k-1} = r$ and $L_k = s$.
@@ -1276,8 +1274,8 @@ Instead of looking for all $n$ vertices, we search
 for $A \subseteq V(G)$.
 The Matthews lower bound will always hold.
 However, we can tighten the bound by picking $A$ such
-that the hitting time is large between any pair of vertices.
-We use large in a relative sense and 
+that the hitting time is large between any pair of vertices in $A$.
+We use `large' in a relative sense and 
 offer an illustrative example in \cref{sec:binary}.
 
 \begin{theorem}[Matthews Lower Bound]
@@ -1290,8 +1288,9 @@ Let $(X_t)$ be a random walk on a graph with $n$ vertices. Then \label{thm:matth
 \end{align}
 
 \begin{proof}
-Without loss of generality, label the vertices $\{1, 2, \ldots, n\}$.
-We may assume that the walk started at vertex $x \in A$.
+Without loss of generality, label the vertices $\{1, 2, \ldots, x\}$
+such that $x=|A|$ and vertex $x$ is the vertex from which it takes the
+most steps to cover the other vertices.
 Let $\sigma$ be a uniform permutation of the vertices in $A$.
 The strategy is to look for the vertices in order $\sigma$.
 
@@ -1306,7 +1305,6 @@ We again write the cover time in a clever way:
 \end{align}
 
 Our goal is to bound the cover time in terms of $\tmina$.
-
 Consider the first term of the sum.
 With probability $1/|A|$, $\sigma_1 = x$ and $T_1=0$.
 Otherwise, the expected time from $x$ to $T_1$ is less than or equal to
@@ -1336,7 +1334,6 @@ P(L_k = \sigma_k). \nonumber
 \end{align}
 
 Since $\sigma$ is a random permutation, $P(L_k = \sigma_k) = 1/k$.
-
 Now find the expected time between $T_{k-1}$ and $T_{k}$
 given that last vertex we visit is $\sigma_k$.
 Consider $r, s \in A$ such that $L_{k-1} = r$ and $L_k = s$.
@@ -1432,7 +1429,7 @@ and \cref{thm:matthews_up} gives
 \end{align}
 
 We now use the Matthews Lower Bound.
-Choose a set $A \subseteq V(G)$ with a large hitting time between any
+We want to choose a set $A \subseteq V(G)$ with a large hitting time between any
 pair of vertices.
 To find such a set, fix a level $h$ in our binary tree.
 Then let $A$ be a set of $2^h$ leaves so that each vertex at level $h$
@@ -1487,7 +1484,7 @@ another upper bound for the cover time of a random walk.
 	\caption{A spanning tree (in bold) of the complete graph with $n=4$.}\label{fig:span}
 \end{figure}
 
-A spanning tree $\T$ is a subset of a graph with all edges
+A spanning tree $\T$ is a subset of a graph with all vertices 
 in $V(G)$ connected by the minimum number of edges in $E(G)$.
 \cref{fig:span} is an example where the bold edges indicate the edges in $E(\T)$
 and the light edges indicate the edges in $E(G)$ but not $E(\T)$.
@@ -1629,7 +1626,7 @@ Thus we conclude that $N_n/n \rightarrow e^{-c}$.
 The Poisson approximation of the binomial implies that if $n \rightarrow \infty$
 and $r/n \rightarrow c$, then the number of visits to each vertex will approach
 a Poisson distribution with mean $c$.
-We can use this to intuite our conclusion: the proportion of visits to each vertex
+We can use this to intuite our latest result: the proportion of visits to each vertex
 approaches $e^{-c}$.
 
 We prove the following theorem and then use it to gain insight into
@@ -1645,7 +1642,7 @@ Observe that the probability that there are $k$ unvisited vertices is
 (1-k/n)^r \nonumber.
 \end{align}
 
-Define $p_m(r,n)$ as the probability that exactly $m$ vertices are unvisited
+Define $p_m(r,n)$ as the probability that exactly $m$ of $n$ vertices are unvisited
 when $r$ steps have been taken.
 Then the probability that all vertices have been visited is the complement
 of the probability that at least one vertex has not been visited.
@@ -1675,8 +1672,8 @@ $ne^{r/n} \rightarrow \lambda$.
 Then
 \begin{align}
 {n \choose m} \left(1-\frac{m}{n}\right)^r &\leq \frac{n^m}{m!} e^{mr/n} 
-= \frac{(n e^{r/n})^m} {m!} \nonumber \\
-&\rightarrow \frac{\lambda ^m} {m!}. \nonumber
+= \frac{(n e^{r/n})^m} {m!}
+\rightarrow \frac{\lambda ^m} {m!}. \label{eqn:up_lim}
 \end{align}
 
 We now turn to the more tricky lower bound.
@@ -1692,8 +1689,7 @@ Then
 As $n \rightarrow \infty$, $\left(1-\frac{m}{n}\right)^m \rightarrow 1$
 and $1/m!$ is constant.
 We use the Taylor series of $\log(1-t)$ for $0 \leq t \leq 1/2$
-to bound the rest.
-Notice that
+to bound the rest,
 \begin{align}
 \log(1-t) &= 0 - t - t^2/2 -t^3/3 - \cdots \nonumber\\
 &\geq -t -t^2/2(1 + 1/2 + 1/4 + \cdots) = -t - t^2 \nonumber
@@ -1702,7 +1698,7 @@ and so we have
 \begin{align}
 \log \left(n^m\left(1-\frac{m}{n}\right)^r \right)
 &= m \log n + r \log\left(1-\frac{m}{n}\right) \nonumber \\
-& \geq m \log n - r\frac{m}{n} - r\frac{m}{n^2}. \nonumber
+& \geq m \log n - r\frac{m}{n} - r\left(\frac{m}{n}\right)^2. \nonumber
 \end{align}
 
 We use our assumption that $ne^{r/n} \rightarrow \lambda$
@@ -1710,11 +1706,11 @@ to solve for $r$
 \begin{align}
 e^{\log n + -r/n} &\rightarrow e^{\log \lambda} \nonumber\\
 \log n + -r/n &= \log \lambda + o(n) \nonumber \\
-r &= n \log n - n \log \lambda + o(n). \nonumber
+r &= n \log n - n \log \lambda +  o(n)n. \nonumber
 \end{align}
 Since $r (m/n)^2 \rightarrow 0$ and
 \begin{align}
-\frac{rm}{n} &=m \log n - m \log \lambda + o(n)\frac{m}{n} \nonumber \\
+\frac{rm}{n} &=m \log n - m \log \lambda +  o(n)m \nonumber \\
  m \log n - \frac{rm}{n}&\rightarrow m \log \lambda \nonumber
 \end{align}
 we have
@@ -1729,7 +1725,7 @@ It follows that
 \end{align}
 
 Now we put the pieces back together.
-The most recent limit implies \cref{eqn:lim}.
+The most recent limit and \cref{eqn:up_lim} imply \cref{eqn:lim}.
 By \cref{eqn:lim} and \cref{eqn:p0},
 \begin{align}
 p_0(r,n) \rightarrow \sum_{k=0}^\infty \lambda^k /k! = e^{-\lambda}. \nonumber
@@ -1737,12 +1733,12 @@ p_0(r,n) \rightarrow \sum_{k=0}^\infty \lambda^k /k! = e^{-\lambda}. \nonumber
 
 Notice $p_0(r,n-m)$ also goes to $e^{-\lambda}$
 since $m$ is fixed and $(n-m)e^{r/(n-m)} \rightarrow \lambda$.
-Finally, the most recent limit and the equation of $p_m(r,n)$ imply
+Finally, the most recent limit and the equation for $p_m(r,n)$ imply
 \begin{align}
 p_m(r,n) 
 &\rightarrow \frac{\lambda^m}{ m!} e^{-\lambda} \nonumber.
 \end{align}
-$N_n$ approaches a Poisson distribution with mean $\lambda$ as claimed.
+Thus $N_n$ approaches a Poisson distribution with mean $\lambda$ as claimed.
 
 \end{proof}
 
@@ -1762,7 +1758,7 @@ P(N_n=0) = \pr(\cov \leq r) = \pr(\cov - n \log n\leq nx)
 &\rightarrow e^{-e^{-x}}. \label{eqn:dist}
 \end{align}
 
-\subsection{The Birthday Problem}\label{sec:birthday}
+\subsection{Birthday Problem}\label{sec:birthday}
 Consider a complete graph (with self-edges) and 365 vertices.
 We may think of the cover time variable of this graph as the number of people
 until every birthday is represented.
@@ -1770,19 +1766,19 @@ We call this the birthday problem.
 
 We use \cref{eqn:dist} to calculate the probability
 that all birthdays are represented in populations of 
-size $r=2190$ and $r=1825$, respectively.
+size $r=1825$ and $r=2190$, respectively.
 The number of vertices $n$ is 365 so $n\log n = 2153$.
-It follows that
-\begin{align}
-\pr(\cov \leq 2190) &= \pr \left(\frac{\cov - 2153}{365} \leq
-\frac{37}{365}\right) \nonumber \\
-&\approx e^{-e^{-0.10137}} \approx 0.40511 \nonumber
-\end{align}
-but 
+It follows that 
 \begin{align}
 \pr(\cov \leq 1825) &= \pr \left(\frac{\cov - 2153}{365} \leq
 \frac{-328}{365}\right) \nonumber \\
-&\approx e^{-e^{-0.89863}} \approx 0.08576. \nonumber
+&\approx e^{-e^{-0.89863}} \approx 0.08576 \nonumber
+\end{align}
+but
+\begin{align}
+\pr(\cov \leq 2190) &= \pr \left(\frac{\cov - 2153}{365} \leq
+\frac{37}{365}\right) \nonumber \\
+&\approx e^{-e^{-0.10137}} \approx 0.40511. \nonumber
 \end{align}
 
 There appears to be a critical threshold where it quickly becomes very likely
@@ -1802,7 +1798,7 @@ that all birthdays have been represented.
 
 %\cite{Gr10}
 
-\newpage
+\clearpage
 \bibliography{mybib}{}
 \bibliographystyle{plain}
 \begin{comment}
